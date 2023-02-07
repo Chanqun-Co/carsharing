@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 
 /**
- * 유저
+ * 유저.
  */
 @Entity
 @Table(
