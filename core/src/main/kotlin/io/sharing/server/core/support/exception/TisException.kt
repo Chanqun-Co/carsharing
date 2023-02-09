@@ -3,10 +3,9 @@ package io.sharing.server.core.support.exception
 class TisException(val error: TisError = TisError.UNKNOWN) : RuntimeException(error.messageKey)
 
 enum class TisError(
-    val code: Int,
     val messageKey: String? = null
 ) {
-    UNKNOWN(1, "error.unknown"),
+    UNKNOWN("error.unknown"),
 
-    USER_DUPLICATED_EMAIL(101, "error.user.duplicated.email")
+    USER_DUPLICATED_EMAIL("error.user.duplicated.email")
 }
