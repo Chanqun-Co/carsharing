@@ -2,25 +2,22 @@ package io.sharing.server.core.user.application.port.inp
 
 import io.sharing.server.core.support.assertion.assertTisExceptionThrows
 import io.sharing.server.core.support.exception.TisError.USER_DUPLICATED_EMAIL
+import io.sharing.server.core.support.test.BaseServiceTest
 import io.sharing.server.core.user.application.port.outp.UserRepository
 import io.sharing.server.core.user.domain.UserCreatedEvent
 import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
-@SpringBootTest
-@Transactional
 @RecordApplicationEvents
-internal class CreateUserTest @Autowired constructor(
+internal class CreateUserTest(
     private val createUser: CreateUser,
     private val userRepository: UserRepository
-) {
+) : BaseServiceTest() {
 
     @Autowired
     lateinit var applicationEvents: ApplicationEvents
