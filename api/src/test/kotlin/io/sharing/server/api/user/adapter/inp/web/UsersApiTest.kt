@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
-internal class UserApiTest(
+internal class UsersApiTest(
     private val userRepository: UserRepository
 ) : BaseApiTest() {
 

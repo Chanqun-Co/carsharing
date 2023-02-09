@@ -13,6 +13,7 @@ import java.time.OffsetDateTime
  */
 @Entity
 @Table(
+    name = "users",
     uniqueConstraints = [
         UniqueConstraint(name = "uq_user_email", columnNames = ["email"])
     ]

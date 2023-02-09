@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/users")
-class UserApi(
+class UsersApi(
     private val createUser: CreateUser
 ) {
 
