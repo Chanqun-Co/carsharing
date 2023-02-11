@@ -1,10 +1,7 @@
 package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
+import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
 
@@ -35,9 +32,23 @@ class User(
     /** 생일 */
     val birthDay: LocalDate,
 
+    /** 상태 */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    var status: UserStatus = UserStatus.ACTIVE,
+
+    /** 지역 */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    var region: Region? = null,
+
     /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<User>() {
+    fun registerRegion(region: Region) {
+        this.region = region
+    }
+
     companion object {
         fun create(email: String, firstName: String, lastName: String, birthDay: LocalDate): User {
             require(birthDay <= LocalDate.now())
