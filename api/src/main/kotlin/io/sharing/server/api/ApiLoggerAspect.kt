@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody
 @Aspect
 @Component
 class ApiLoggerAspect(
-    private val request: HttpServletRequest, private val objectMapper: ObjectMapper
+    private val request: HttpServletRequest,
+    private val objectMapper: ObjectMapper
 ) {
     private val logger = KotlinLogging.logger { }
 
