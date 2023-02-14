@@ -7,5 +7,7 @@ enum class TisError(
 ) {
     UNKNOWN("error.unknown"),
 
-    USER_DUPLICATED_EMAIL("error.user.duplicated.email")
+    USER_DUPLICATED_EMAIL("error.user.duplicated.email"),
+
+    EMAIL_AUTH_TIME_OUT("error.email.auth.time.out"),
 }
