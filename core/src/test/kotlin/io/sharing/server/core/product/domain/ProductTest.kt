@@ -1,8 +1,6 @@
 package io.sharing.server.core.product.domain
 
 import io.sharing.server.core.user.domain.User
-import io.sharing.server.core.user.domain.UserStatus
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

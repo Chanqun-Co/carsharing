@@ -39,12 +39,10 @@ class Product(
 
     /** 설명 */
     @Column(columnDefinition = "TEXT")
-    val description: String,
+    var description: String,
 
     /** 사진 */
 //    @OneToMany
 //    var images: List<Image>
 
-): BaseAggregateRoot<Product>() {
-
-}
+) : BaseAggregateRoot<Product>()
