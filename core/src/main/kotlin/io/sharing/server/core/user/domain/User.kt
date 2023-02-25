@@ -1,6 +1,7 @@
 package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
+import io.sharing.server.core.support.jpa.Region
 import io.sharing.server.core.support.jpa.Status
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -18,32 +19,32 @@ import java.time.OffsetDateTime
 )
 class User(
 
-    /** 이메일 */
+        /** 이메일 */
     @Column(length = 50, nullable = false)
     val email: String,
 
-    /** 이름 */
+        /** 이름 */
     @Column(length = 50, nullable = false)
     val firstName: String,
 
-    /** 성 */
+        /** 성 */
     @Column(length = 50, nullable = false)
     val lastName: String,
 
-    /** 생일 */
+        /** 생일 */
     val birthDay: LocalDate,
 
-    /** 상태 */
+        /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     var status: Status = Status.ACTIVE,
 
-    /** 지역 */
+        /** 지역 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     var region: Region? = null,
 
-    /** 생성일시 */
+        /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<User>() {
     fun registerRegion(region: Region) {

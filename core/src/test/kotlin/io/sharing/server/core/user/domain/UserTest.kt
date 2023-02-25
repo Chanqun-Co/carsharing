@@ -1,6 +1,7 @@
 package io.sharing.server.core.user.domain
 
-import io.sharing.server.core.user.domain.Region.*
+import io.sharing.server.core.support.jpa.Status
+import io.sharing.server.core.support.jpa.Region.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Test
@@ -21,7 +22,7 @@ internal class UserTest {
         assertThat(user.firstName).isEqualTo(firstName)
         assertThat(user.lastName).isEqualTo(lastName)
         assertThat(user.birthDay).isEqualTo(birthDay)
-        assertThat(user.status).isEqualTo(UserStatus.ACTIVE)
+        assertThat(user.status).isEqualTo(Status.ACTIVE)
         assertThat(user.region).isNull()
         assertThat(user.createdAt).isNotNull
     }
