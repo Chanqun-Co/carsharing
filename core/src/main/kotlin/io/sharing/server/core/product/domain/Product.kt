@@ -1,6 +1,7 @@
 package io.sharing.server.core.product.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
+import io.sharing.server.core.support.jpa.Status
 import io.sharing.server.core.user.domain.Region
 import io.sharing.server.core.user.domain.User
 import jakarta.persistence.*
@@ -32,7 +33,7 @@ class Product(
     /** 상태정보 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var productStatus: ProductStatus,
+    var status: Status = Status.ACTIVE,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
