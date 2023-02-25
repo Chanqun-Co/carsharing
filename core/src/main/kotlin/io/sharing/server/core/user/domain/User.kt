@@ -1,6 +1,7 @@
 package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
+import io.sharing.server.core.support.jpa.Status
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -35,7 +36,7 @@ class User(
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: UserStatus = UserStatus.ACTIVE,
+    var status: Status = Status.ACTIVE,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
