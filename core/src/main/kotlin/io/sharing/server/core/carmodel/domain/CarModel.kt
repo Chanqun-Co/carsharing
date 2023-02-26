@@ -6,26 +6,24 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 
+/**
+ * 차량 모델
+ */
 @Entity
 class CarModel(
 
-    /** 차량색상 */
-    @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = true)
-    val color: Color,
-
-    /** 차량모델명 */
+    /** 이름 */
     @Enumerated(EnumType.STRING)
     @Column(length = 100, nullable = true)
     val name: CarName,
 
-    /** 차량제조사 */
+    /** 제조사 */
     @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = true)
     val manufacturer: Manufacturer,
 
     /** 연식 */
-    @Column(length = 4, nullable = true)
+    @Column(nullable = true)
     val year: Int,
 
     /** 연료 */

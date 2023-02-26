@@ -1,4 +1,4 @@
-package io.sharing.server.core.support.jpa
+package io.sharing.server.core.user.domain
 
 /**
  * 지역
