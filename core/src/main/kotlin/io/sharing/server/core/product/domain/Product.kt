@@ -1,18 +1,23 @@
 package io.sharing.server.core.product.domain
 
+import io.sharing.server.core.carmodel.domain.CarModel
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
-import io.sharing.server.core.support.jpa.Status
 import io.sharing.server.core.user.domain.Region
 import io.sharing.server.core.user.domain.User
 import jakarta.persistence.*
 
+/**
+ * 상품
+ */
 @Entity
 class Product(
+    /** 유저 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    val user: User,
 
-    /** 차량모델 */
-    // TODO: 차량모델
-    //    @OneToOne(fetch = FetchType.LAZY)
-    //    val model: Model,
+    /** 차량 모델 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    val carModel: CarModel,
 
     /** 주행거리 */
     @Column(nullable = false)
@@ -26,21 +31,17 @@ class Product(
     @Column(length = 50, nullable = false)
     var licensePlate: String,
 
-    /** 유저 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    val user: User,
-
-    /** 상태정보 */
+    /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: Status = Status.ACTIVE,
+    var status: ProductStatus = ProductStatus.REGISTERED,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     val region: Region,
 
-    /** 상품설명:  */
+    /** 설명 */
     @Column(columnDefinition = "TEXT")
     var description: String,
 
