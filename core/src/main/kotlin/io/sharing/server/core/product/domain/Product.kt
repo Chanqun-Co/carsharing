@@ -19,6 +19,11 @@ class Product(
     @ManyToOne(fetch = FetchType.LAZY)
     val carModel: CarModel,
 
+    /** 색상 */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    var color: ProductColor,
+
     /** 주행거리 */
     @Column(nullable = false)
     var distance: Int,
