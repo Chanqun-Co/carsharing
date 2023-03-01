@@ -7,7 +7,6 @@ import io.sharing.server.core.user.domain.User
 import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.util.stream.IntStream
 
 class ProductTest {
 
@@ -39,20 +38,30 @@ class ProductTest {
     @Test
     fun `상품 이미지 추가`() {
         val product = createProduct()
+        val images = mutableListOf<String>()
 
-        IntStream.rangeClosed(1, 10).boxed().forEach {
-            product.addImage(createProductImage("test-url$it"))
-        }
+        (1..10).forEach { images.add("image$it") }
+        product.updateImages(images)
 
         assertThat(product.images.size).isEqualTo(10)
-        assertThat(product.images[0].url).isEqualTo("test-url1")
+        assertThat(product.images).containsExactlyInAnyOrder(
+            "image1", "image2", "image3", "image4", "image5",
+            "image6", "image7", "image8", "image9", "image10"
+        )
     }
+}
 
-    fun createProduct(carModel: CarModel = createCarModel(), user: User = createUser(), color: ProductColor = ProductColor.BLACK, distance: Int = 1000, rentalFee: Int = 1000, licensePlate: String = "사와1234", region: Region = Region.GASAN, description: String = "test"): Product {
-        return Product(carModel = carModel, user = user, color = color, distance = distance, rentalFee = rentalFee, licensePlate = licensePlate, region = region, description = description)
-    }
-
-    fun createProductImage(url: String = "https://s3.ap-northeast-2.amazonaws.com/carsharing/459ba1c3-6ce1-4269-b1d9-08f60f974092.jpg"): ProductImage {
-        return ProductImage(url)
-    }
+fun createProduct(
+    user: User = createUser(),
+    carModel: CarModel = createCarModel(),
+    color: ProductColor = ProductColor.BLACK,
+    distance: Int = 1000,
+    rentalFee: Int = 1000,
+    licensePlate: String = "사와1234",
+    region: Region = Region.GASAN,
+    description: String = "test"): Product {
+    return Product(
+        user, carModel, color, distance = distance, rentalFee = rentalFee,
+        licensePlate, region = region, description = description
+    )
 }

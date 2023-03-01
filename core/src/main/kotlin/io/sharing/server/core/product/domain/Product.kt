@@ -54,10 +54,9 @@ class Product(
     /** 이미지 */
     @ElementCollection
     @CollectionTable(name = "product_img", joinColumns = [JoinColumn(name = "product_id")])
-    val images: MutableList<ProductImage> = mutableListOf(),
-
+    var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
-    fun addImage(image: ProductImage) {
-        this.images.add(image)
+    fun updateImages(images: MutableList<String>) {
+        this.images = images
     }
 }
