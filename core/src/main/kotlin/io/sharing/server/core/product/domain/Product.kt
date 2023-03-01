@@ -11,6 +11,7 @@ import jakarta.persistence.*
  */
 @Entity
 class Product(
+
     /** 유저 */
     @ManyToOne(fetch = FetchType.LAZY)
     val user: User,
@@ -50,9 +51,13 @@ class Product(
     @Column(columnDefinition = "TEXT")
     var description: String,
 
-    /** 사진 */
-    // TODO: Image 추가
-    //    @OneToMany
-    //    var images: List<Image>
+    /** 이미지 */
+    @ElementCollection
+    @CollectionTable(name = "product_img", joinColumns = [JoinColumn(name = "product_id")])
+    val images: MutableList<ProductImage> = mutableListOf(),
 
-) : BaseAggregateRoot<Product>()
+) : BaseAggregateRoot<Product>() {
+    fun addImage(image: ProductImage) {
+        this.images.add(image)
+    }
+}
