@@ -14,21 +14,20 @@ class CarModel(
 
     /** 이름 */
     @Enumerated(EnumType.STRING)
-    @Column(length = 100, nullable = true)
-    val name: CarName,
+    @Column(length = 100, nullable = false)
+    var name: CarName,
 
     /** 제조사 */
     @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = true)
-    val manufacturer: Manufacturer,
+    @Column(length = 50, nullable = false)
+    var manufacturer: Manufacturer,
 
     /** 연식 */
-    @Column(nullable = true)
-    val year: Int,
+    @Column(nullable = false)
+    var year: Int,
 
     /** 연료 */
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = true)
-    val fuel: Fuel
-
+    @Column(length = 20, nullable = false)
+    var fuel: Fuel
 ) : BaseAggregateRoot<CarModel>()
