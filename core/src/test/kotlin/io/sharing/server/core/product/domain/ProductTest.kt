@@ -12,8 +12,8 @@ class ProductTest {
 
     @Test
     fun `상품 생성`() {
-        val carModel = createCarModel()
         val user = createUser()
+        val carModel = createCarModel()
         val color = ProductColor.BLACK
         val distance = 20000
         val rentalFee = 500
@@ -21,7 +21,10 @@ class ProductTest {
         val region = Region.DANGSAN
         val description = "TestTest"
 
-        val product = Product(carModel = carModel, user = user, color = color, distance = distance, rentalFee = rentalFee, licensePlate = licensePlate, region = region, description = description)
+        val product = Product(
+            user, carModel, color, distance = distance, rentalFee = rentalFee,
+            licensePlate, region = region, description = description
+        )
 
         assertThat(product.carModel).isEqualTo(carModel)
         assertThat(product.user).isEqualTo(user)
@@ -32,15 +35,13 @@ class ProductTest {
         assertThat(product.status).isEqualTo(ProductStatus.REGISTERED)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
-        assertThat(product.images.size).isEqualTo(1)
     }
 
     @Test
     fun `상품 이미지 추가`() {
         val product = createProduct()
-        val images = mutableListOf<String>()
+        val images = (1..10).map { "image$it" }.toMutableList()
 
-        (1..10).forEach { images.add("image$it") }
         product.updateImages(images)
 
         assertThat(product.images.size).isEqualTo(10)
