@@ -34,6 +34,15 @@ internal class UserTest {
     }
 
     @Test
+    fun `유저 삭제`() {
+        val user = createUser()
+
+        user.changeToInactive()
+
+        assertThat(user.status).isEqualTo(UserStatus.INACTIVE)
+    }
+
+    @Test
     fun `지역 등록`() {
         val user = createUser()
 

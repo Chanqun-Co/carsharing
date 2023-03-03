@@ -49,6 +49,10 @@ class User(
         this.region = region
     }
 
+    fun changeToInactive() {
+        this.status = UserStatus.INACTIVE
+    }
+
     companion object {
         fun create(email: String, firstName: String, lastName: String, birthDay: LocalDate): User {
             require(birthDay <= LocalDate.now())
