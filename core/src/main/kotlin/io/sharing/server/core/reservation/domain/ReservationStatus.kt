@@ -1,11 +1,13 @@
 package io.sharing.server.core.reservation.domain
 
 enum class ReservationStatus {
-    /** 승인 */
-    APPROVED,
+    //TODO: 다음으로 넘어가는 메소드
 
     /** 승인 대기 */
-    APPROVAL_PENDING,
+    PENDING,
+
+    /** 승인 */
+    APPROVED,
 
     /** 승인 거절 */
     UNAPPROVED,

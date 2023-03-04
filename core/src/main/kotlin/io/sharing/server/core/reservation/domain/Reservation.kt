@@ -16,9 +16,11 @@ import java.time.OffsetDateTime
  */
 class Reservation(
 
+    /** 게스트 */
     @ManyToOne(fetch = FetchType.LAZY)
     val guest: User,
 
+    /** 호스트 */
     @ManyToOne(fetch = FetchType.LAZY)
     val host: User,
 
@@ -32,22 +34,25 @@ class Reservation(
     /** 체크아웃 */
     var checkOut: OffsetDateTime,
 
-    /** 예약상태 */
+    /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: ReservationStatus = ReservationStatus.APPROVAL_PENDING,
+    var status: ReservationStatus = ReservationStatus.PENDING,
 
     /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<Reservation>() {
 
     companion object {
-        private const val MINIMUM_RESERVATION_TIME = 2L
+        val MINIMUM_RESERVATION_TIME = 2L
+
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
             require(product.status == ProductStatus.REGISTERED)
             require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
 
-            return Reservation(guest, host, product, checkIn, checkOut)
+            return Reservation(guest, host, product, checkIn, checkOut).apply {
+                this.registerEvent(ReservationCreatedEvent(this))
+            }
         }
     }
 }

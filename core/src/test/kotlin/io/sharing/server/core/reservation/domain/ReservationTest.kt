@@ -25,15 +25,13 @@ class ReservationTest {
         assertThat(reservation.product).isEqualTo(product)
         assertThat(reservation.checkIn).isEqualTo(checkin)
         assertThat(reservation.checkOut).isEqualTo(checkout)
-        assertThat(reservation.status).isEqualTo(ReservationStatus.APPROVAL_PENDING)
+        assertThat(reservation.status).isEqualTo(ReservationStatus.PENDING)
     }
 
     @Test
     fun `예약 생성 실패 - 체크아웃 날짜는 체크인 2시간 이전 일 때`() {
         val checkIn = OffsetDateTime.now()
-        val checkOut = checkIn.plusHours(1)
-            .plusMinutes(59)
-            .plusSeconds(59)
+        val checkOut = checkIn.plusHours(Reservation.MINIMUM_RESERVATION_TIME).minusNanos(1)
 
         assertThatIllegalArgumentException().isThrownBy {
             createReservation(checkIn = checkIn, checkOut = checkOut)
