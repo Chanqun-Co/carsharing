@@ -51,9 +51,8 @@ class User(
     }
 
     fun inactivate() {
-        if (status == INACTIVE) {
-            throw IllegalArgumentException()
-        }
+        require(status == ACTIVE)
+
         this.status = INACTIVE
     }
 

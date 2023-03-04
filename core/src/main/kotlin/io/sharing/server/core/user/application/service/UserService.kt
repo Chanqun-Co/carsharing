@@ -11,6 +11,7 @@ import io.sharing.server.core.user.application.port.outp.UserRepository
 import io.sharing.server.core.user.domain.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @UseCase
 @Transactional
@@ -23,8 +24,9 @@ class UserService(
         with(command) { userRepository.save(User.create(email, firstName, lastName, birthDay)) }
     }
 
-    override fun inactive(command: InactivateUserCommand) {
-        val user = userRepository.findByIdOrNull(command.id) ?: throw IllegalArgumentException()
+    override fun inactivate(command: InactivateUserCommand) {
+        // TODO : extension 으로 변환하기
+        val user = userRepository.findByIdOrNull(command.userId)!!
 
         user.inactivate()
     }

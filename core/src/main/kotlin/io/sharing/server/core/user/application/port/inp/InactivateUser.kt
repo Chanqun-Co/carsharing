@@ -8,9 +8,9 @@ interface InactivateUser {
      * 유저가 존재하지 않는다면
      * @throws IllegalArgumentException() 예외처리한다.
      */
-    fun inactive(command: InactivateUserCommand)
+    fun inactivate(command: InactivateUserCommand)
 }
 
  class InactivateUserCommand(
-    val id: Long
+    val userId: Long
  )

@@ -35,12 +35,23 @@ internal class UserTest {
     }
 
     @Test
-    fun `유저 삭제`() {
+    fun `유저 비활성화`() {
         val user = createUser()
 
         user.inactivate()
 
         assertThat(user.status).isEqualTo(INACTIVE)
+    }
+
+    @Test
+    fun `유저 비활성화 실패 - 이미 비활성화 된 유저`() {
+        val user = createUser().apply {
+            this.status = INACTIVE
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            user.inactivate()
+        }
     }
 
     @Test
