@@ -16,7 +16,7 @@ class ReservationTest {
         val host = createUser()
         val product = createProduct()
         val checkin = OffsetDateTime.now()
-        val checkout = OffsetDateTime.now().plusHours(2L)
+        val checkout = OffsetDateTime.now().plusHours(Reservation.MINIMUM_RESERVATION_TIME)
 
         val reservation = Reservation.create(guest, host, product, checkin, checkout)
 

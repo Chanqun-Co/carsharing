@@ -16,15 +16,15 @@ import java.time.OffsetDateTime
  */
 class Reservation(
 
-    /** 게스트 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    val guest: User,
-
     /** 호스트 */
     @ManyToOne(fetch = FetchType.LAZY)
     val host: User,
 
-    /** 등록차량 정보 */
+    /** 게스트 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    val guest: User,
+
+    /** 상품 정보 */
     @ManyToOne(fetch = FetchType.LAZY)
     val product: Product,
 
@@ -44,7 +44,7 @@ class Reservation(
 ) : BaseAggregateRoot<Reservation>() {
 
     companion object {
-        val MINIMUM_RESERVATION_TIME = 2L
+        const val MINIMUM_RESERVATION_TIME = 2L
 
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
             require(product.status == ProductStatus.REGISTERED)

@@ -9,12 +9,12 @@ enum class ReservationStatus {
     /** 승인 */
     APPROVED,
 
-    /** 승인 거절 */
+    /** 거절 */
     UNAPPROVED,
 
     /** 취소 요청 */
     CANCELLATION_REQUEST,
 
-    /** 취소 */
+    /** 취소됨 */
     CANCELED
 }
