@@ -6,13 +6,12 @@ import io.sharing.server.core.user.domain.UserStatus.*
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.test.context.event.RecordApplicationEvents
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
-@RecordApplicationEvents
-internal class InactiveUserTest(
+internal class InactivateUserTest(
     private val createUser: CreateUser,
-    private val inactiveUser: InactiveUser,
+    private val inactivateUser: InactivateUser,
     private val userRepository: UserRepository
 ) : BaseServiceTest() {
 
@@ -24,11 +23,25 @@ internal class InactiveUserTest(
     }
 
     @Test
-    fun `유저 삭제`() {
+    fun `유저 비활성화`() {
         val foundUser = userRepository.findAll().first()
+        val inactivateUserCommand = foundUser.id?.let { InactivateUserCommand(it) }
 
-        foundUser.id?.let { inactiveUser.inactive(it) }
+        inactivateUserCommand?.let { inactivateUser.inactive(it) }
 
         assertThat(foundUser.status).isEqualTo(INACTIVE)
+    }
+
+    @Test
+    fun `유저 비활성화 실패 - 이미 비활성화 된 유저`() {
+        val foundUser = userRepository.findAll().first()
+
+        foundUser.apply {
+            this.status = INACTIVE
+        }
+
+        assertThrows<IllegalArgumentException> {
+            foundUser.inactivate()
+        }
     }
 }
