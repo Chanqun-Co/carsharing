@@ -36,7 +36,9 @@ internal class UserTest {
 
     @Test
     fun `유저 비활성화`() {
-        val user = createUser()
+        val user = createUser().apply {
+            this.status = ACTIVE
+        }
 
         user.inactivate()
 
