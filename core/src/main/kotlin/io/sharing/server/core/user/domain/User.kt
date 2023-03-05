@@ -1,6 +1,7 @@
 package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
+import io.sharing.server.core.user.domain.UserStatus.*
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -35,7 +36,7 @@ class User(
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: UserStatus = UserStatus.ACTIVE,
+    var status: UserStatus = ACTIVE,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
@@ -47,6 +48,12 @@ class User(
 ) : BaseAggregateRoot<User>() {
     fun registerRegion(region: Region) {
         this.region = region
+    }
+
+    fun inactivate() {
+        require(status == ACTIVE)
+
+        this.status = INACTIVE
     }
 
     companion object {
