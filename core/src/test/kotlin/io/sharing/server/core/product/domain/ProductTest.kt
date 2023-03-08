@@ -32,7 +32,7 @@ class ProductTest {
         assertThat(product.distance).isEqualTo(distance)
         assertThat(product.rentalFee).isEqualTo(rentalFee)
         assertThat(product.licensePlate).isEqualTo(licensePlate)
-        assertThat(product.status).isEqualTo(ProductStatus.REGISTERED)
+        assertThat(product.status).isEqualTo(ProductStatus.SELLING)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
     }
@@ -49,6 +49,46 @@ class ProductTest {
             "image1", "image2", "image3", "image4", "image5",
             "image6", "image7", "image8", "image9", "image10"
         )
+    }
+
+    @Test
+    fun `상품 판매 중지`() {
+        val product = createProduct()
+
+        product.pause()
+
+        assertThat(product.status).isEqualTo(ProductStatus.PAUSED)
+    }
+
+    @Test
+    fun `상품 판매 중지 실패 - 이미 판매 중지된 상품`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.PAUSED
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.pause()
+        }
+    }
+
+    @Test
+    fun `상품 재판매 시작`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.PAUSED
+        }
+
+        product.sell()
+
+        assertThat(product.status).isEqualTo(ProductStatus.SELLING)
+    }
+
+    @Test
+    fun `상품 재판매 시작 실패 - 이미 판매중인 상품`() {
+        val product = createProduct()
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.sell()
+        }
     }
 }
 

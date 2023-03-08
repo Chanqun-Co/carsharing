@@ -49,7 +49,7 @@ class Reservation(
         const val MINIMUM_RESERVATION_TIME = 2L
 
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
-            require(product.status == ProductStatus.REGISTERED)
+            require(product.status == ProductStatus.SELLING)
             require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
 
             return Reservation(guest, host, product, checkIn, checkOut).apply {
