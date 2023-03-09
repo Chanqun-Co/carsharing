@@ -32,7 +32,7 @@ class ProductTest {
         assertThat(product.distance).isEqualTo(distance)
         assertThat(product.rentalFee).isEqualTo(rentalFee)
         assertThat(product.licensePlate).isEqualTo(licensePlate)
-        assertThat(product.status).isEqualTo(ProductStatus.SELLING)
+        assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
     }
@@ -52,42 +52,42 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 판매 중지`() {
+    fun `상품 상태 이용 불가능한 상품으로 변경`() {
         val product = createProduct()
 
-        product.pause()
+        product.onUnavailable()
 
-        assertThat(product.status).isEqualTo(ProductStatus.PAUSED)
+        assertThat(product.status).isEqualTo(ProductStatus.UNAVAILABLE)
     }
 
     @Test
-    fun `상품 판매 중지 실패 - 이미 판매 중지된 상품`() {
+    fun `상품 상태 이용 불가능한 상품으로 변경 실패 - 이미 상태가 이용불가능인 상품`() {
         val product = createProduct().apply {
-            this.status = ProductStatus.PAUSED
+            this.status = ProductStatus.UNAVAILABLE
         }
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.pause()
+            product.onUnavailable()
         }
     }
 
     @Test
-    fun `상품 재판매 시작`() {
+    fun `상품 상태 이용 가능한 상품으로 변경`() {
         val product = createProduct().apply {
-            this.status = ProductStatus.PAUSED
+            this.status = ProductStatus.UNAVAILABLE
         }
 
-        product.sell()
+        product.onAvailable()
 
-        assertThat(product.status).isEqualTo(ProductStatus.SELLING)
+        assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
     }
 
     @Test
-    fun `상품 재판매 시작 실패 - 이미 판매중인 상품`() {
+    fun `상품 상태 이용 가능한 상품으로 변경 실패 - 이미 이용 가능한 상품`() {
         val product = createProduct()
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.sell()
+            product.onAvailable()
         }
     }
 }

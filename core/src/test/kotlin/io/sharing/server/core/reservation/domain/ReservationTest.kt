@@ -39,9 +39,9 @@ class ReservationTest {
     }
 
     @Test
-    fun `예약 생성 실패 - Product의 상태가 PAUSED일 때`() {
+    fun `예약 생성 실패 - Product의 상태가 UNAVAILABLE일 때`() {
         val product = createProduct().apply {
-            this.status = PAUSED
+            this.status = UNAVAILABLE
         }
 
         assertThatIllegalArgumentException().isThrownBy {
