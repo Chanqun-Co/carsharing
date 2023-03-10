@@ -23,6 +23,8 @@ jobs:
           mysql database: 'sharingtest'
           mysql root password: ${{ secrets.ROOT_PASSWORD }}
 
+      - name: password
+        run: echo ${{ secrets.ROOT_PASSWORD }}
       - name: Wrap Gradle
         run: gradle wrap
       - name: Grant execute permission for gradlew
