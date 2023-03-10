@@ -1,9 +1,11 @@
 name: PR Test
+
 on:
   push:
     branches: [develop]
   pull_request:
     branches: [develop]
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,7 +18,7 @@ jobs:
         ports:
           - 3306
         options: >-
-          --health-cmd=“mysqladmin ping”
+          --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -25,8 +27,8 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: ‘zulu’
-          java-version: ‘17’
+          distribution: 'zulu'
+          java-version: '17'
       - name: Start Mysql
         run: sudo service mysql start
       - name: Grant execute permission for gradlew
