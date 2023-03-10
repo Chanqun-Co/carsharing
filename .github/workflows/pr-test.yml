@@ -7,21 +7,9 @@ on:
     branches: [develop]
 
 jobs:
-  test:
+  run-test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: 1234
-          MYSQL_DATABASE: sharingtest
-        ports:
-          - 3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -29,8 +17,12 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
-      - name: Start Mysql
-        run: sudo service mysql start
+        
+      - uses: samin/mysql-action@v1
+        with:
+          mysql database: 'sharingtest'
+          mysql root password: ${{ secrets.ROOT_PASSWORD }}
+
       - name: Wrap Gradle
         run: gradle wrap
       - name: Grant execute permission for gradlew
