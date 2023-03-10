@@ -17,12 +17,14 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
-        
-      - uses: samin/mysql-action@v1
+
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop  
+
+      - uses: mirromutth/mysql-action@v1.1
         with:
-          mysql user: 'root'
           mysql database: 'sharingtest'
-          mysql password: ${{secrets.ROOT_PASSWORD}}
+          mysql root password: ${{secrets.ROOT_PASSWORD}}
 
       - name: Wrap Gradle
         run: gradle wrap
