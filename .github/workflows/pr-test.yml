@@ -14,7 +14,6 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: 1234
           MYSQL_DATABASE: sharingtest
         ports:
@@ -29,7 +28,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'zulu'
       - name: Grant execute permission for gradlew
         - run: chmod +x gradlew
       - name: Test with Gradle
