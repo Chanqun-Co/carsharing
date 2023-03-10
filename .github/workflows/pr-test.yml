@@ -20,10 +20,9 @@ jobs:
         
       - uses: samin/mysql-action@v1
         with:
-          host port: 3306
-          container port: 3306
+          mysql user: 'root'
           mysql database: 'sharingtest'
-          mysql root password: ${{secrets.ROOT_PASSWORD}}
+          mysql password: ${{secrets.ROOT_PASSWORD}}
 
       - name: Wrap Gradle
         run: gradle wrap
