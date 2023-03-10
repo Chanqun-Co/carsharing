@@ -1,7 +1,7 @@
 package io.sharing.server.core.reservation.domain
 
 enum class ReservationStatus {
-    //TODO: 다음으로 넘어가는 메소드
+    // TODO: 다음으로 넘어가는 메소드
 
     /** 승인 대기 */
     PENDING,
