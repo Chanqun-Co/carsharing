@@ -17,9 +17,8 @@ internal class InactivateUserTest(
         val user = userRepository.save(createUser().apply {
             this.status = ACTIVE
         })
-        val inactivateUserCommand = InactivateUserCommand(user.id!!)
 
-        inactivateUser.inactivate(inactivateUserCommand)
+        inactivateUser.inactivate(InactivateUserCommand(user.id!!))
 
         assertThat(user.status).isEqualTo(INACTIVE)
     }
