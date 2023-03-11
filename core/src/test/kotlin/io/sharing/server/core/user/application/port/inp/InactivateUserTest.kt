@@ -17,11 +17,10 @@ internal class InactivateUserTest(
     fun `유저 비활성화`() {
         val user = User.create("woogie@gmail.com", "이름", "성", LocalDate.now())
         userRepository.save(user)
-        val foundUser = userRepository.findAll().first()
 
-        val inactivateUserCommand = InactivateUserCommand(foundUser.id!!)
+        val inactivateUserCommand = InactivateUserCommand(user.id!!)
         inactivateUser.inactivate(inactivateUserCommand)
 
-        assertThat(foundUser.status).isEqualTo(INACTIVE)
+        assertThat(user.status).isEqualTo(INACTIVE)
     }
 }
