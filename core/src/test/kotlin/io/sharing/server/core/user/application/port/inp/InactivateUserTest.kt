@@ -4,6 +4,7 @@ import io.sharing.server.core.support.test.BaseServiceTest
 import io.sharing.server.core.user.application.port.outp.UserRepository
 import io.sharing.server.core.user.domain.User
 import io.sharing.server.core.user.domain.UserStatus.*
+import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -15,8 +16,7 @@ internal class InactivateUserTest(
 
     @Test
     fun `유저 비활성화`() {
-        val user = User.create("woogie@gmail.com", "이름", "성", LocalDate.now())
-        userRepository.save(user)
+        val user = userRepository.save(createUser())
 
         val inactivateUserCommand = InactivateUserCommand(user.id!!)
         inactivateUser.inactivate(inactivateUserCommand)
