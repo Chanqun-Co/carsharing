@@ -32,7 +32,7 @@ class ProductTest {
         assertThat(product.distance).isEqualTo(distance)
         assertThat(product.rentalFee).isEqualTo(rentalFee)
         assertThat(product.licensePlate).isEqualTo(licensePlate)
-        assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
+        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
     }
@@ -52,22 +52,90 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 상태 이용 불가능한 상품으로 변경`() {
-        val product = createProduct()
+    fun `상품 상태 심사로 변경`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.DISAPPROVED
+        }
 
-        product.onUnavailable()
+        product.screen()
+
+        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
+    }
+
+    @Test
+    fun `상품 상태 심사로 변경 실패 - 이미 상태가 심사인 상품`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.SCREENING
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.screen()
+        }
+    }
+
+    @Test
+    fun `상품 상태 거절로 변경`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.DISAPPROVED
+        }
+
+        product.screen()
+
+        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
+    }
+
+    @Test
+    fun `상품 상태 거절로 변경 실패 - 이미 상태가 거절인 상품`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.DISAPPROVED
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.disapprove()
+        }
+    }
+
+    @Test
+    fun `상품 상태 취소로 변경`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.SCREENING
+        }
+
+        product.cancel()
+
+        assertThat(product.status).isEqualTo(ProductStatus.CANCELED)
+    }
+
+    @Test
+    fun `상품 상태 취소로 변경 실패 - 이미 상태가 취소인 상품`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.CANCELED
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.cancel()
+        }
+    }
+
+    @Test
+    fun `상품 상태 이용 불가능한 상품으로 변경`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.AVAILABLE
+        }
+
+        product.makeUnavailable()
 
         assertThat(product.status).isEqualTo(ProductStatus.UNAVAILABLE)
     }
 
     @Test
-    fun `상품 상태 이용 불가능한 상품으로 변경 실패 - 이미 상태가 이용불가능인 상품`() {
+    fun `상품 상태 이용 불가능한 상품으로 변경 실패 - 이미 상태가 이용 불가능인 상품`() {
         val product = createProduct().apply {
             this.status = ProductStatus.UNAVAILABLE
         }
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.onUnavailable()
+            product.makeUnavailable()
         }
     }
 
@@ -77,17 +145,19 @@ class ProductTest {
             this.status = ProductStatus.UNAVAILABLE
         }
 
-        product.onAvailable()
+        product.makeAvailable()
 
         assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
     }
 
     @Test
     fun `상품 상태 이용 가능한 상품으로 변경 실패 - 이미 이용 가능한 상품`() {
-        val product = createProduct()
+        val product = createProduct().apply {
+            this.status = ProductStatus.AVAILABLE
+        }
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.onAvailable()
+            product.makeAvailable()
         }
     }
 }
@@ -99,10 +169,11 @@ fun createProduct(
     distance: Int = 1000,
     rentalFee: Int = 1000,
     licensePlate: String = "사와1234",
+    status: ProductStatus = ProductStatus.AVAILABLE,
     region: Region = Region.GASAN,
     description: String = "test"): Product {
     return Product(
         user, carModel, color, distance = distance, rentalFee = rentalFee,
-        licensePlate, region = region, description = description
+        licensePlate, status, region = region, description = description
     )
 }

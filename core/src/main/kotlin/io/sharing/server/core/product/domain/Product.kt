@@ -40,7 +40,7 @@ class Product(
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: ProductStatus = ProductStatus.AVAILABLE,
+    var status: ProductStatus = ProductStatus.SCREENING,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
@@ -56,19 +56,37 @@ class Product(
     @CollectionTable(name = "product_img", joinColumns = [JoinColumn(name = "product_id")])
     var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
-    fun onAvailable() {
-        require(this.status == ProductStatus.UNAVAILABLE)
+    fun updateImages(images: MutableList<String>) {
+        this.images = images
+    }
+
+    fun screen() {
+        require(this.status == ProductStatus.DISAPPROVED)
+
+        this.status = ProductStatus.SCREENING
+    }
+
+    fun disapprove() {
+        require(this.status == ProductStatus.SCREENING)
+
+        this.status = ProductStatus.DISAPPROVED
+    }
+
+    fun cancel() {
+        require(this.status == ProductStatus.SCREENING || this.status == ProductStatus.DISAPPROVED)
+
+        this.status = ProductStatus.CANCELED
+    }
+
+    fun makeAvailable() {
+        require(this.status == ProductStatus.SCREENING || this.status == ProductStatus.UNAVAILABLE)
 
         this.status = ProductStatus.AVAILABLE
     }
 
-    fun onUnavailable() {
+    fun makeUnavailable() {
         require(this.status == ProductStatus.AVAILABLE)
 
         this.status = ProductStatus.UNAVAILABLE
-    }
-
-    fun updateImages(images: MutableList<String>) {
-        this.images = images
     }
 }
