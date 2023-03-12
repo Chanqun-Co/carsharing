@@ -88,7 +88,7 @@ class ProductTest {
         assertThat(product.status).isEqualTo(ProductStatus.REJECTED)
     }
 
-    @EnumSource(value = ProductStatus::class, names = ["REJECTED", "AVAILABLE", "UNAVAILABLE"])
+    @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
     @ParameterizedTest
     fun `등록 상태가 아니면 상품을 거절할 수 없다`(status: ProductStatus) {
         val product = createProduct().apply {
