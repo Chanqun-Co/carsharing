@@ -1,6 +1,7 @@
 package io.sharing.server.core.product.domain
 
 import io.sharing.server.core.carmodel.domain.CarModel
+import io.sharing.server.core.product.domain.ProductStatus.*
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
 import io.sharing.server.core.user.domain.Region
 import io.sharing.server.core.user.domain.User
@@ -8,6 +9,8 @@ import jakarta.persistence.*
 
 /**
  * 상품
+ *
+ * - 관리자는 등록된 상품을 승인 또는 거절을 할 수 있다.
  */
 @Entity
 class Product(
@@ -40,7 +43,7 @@ class Product(
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: ProductStatus = ProductStatus.SCREENING,
+    var status: ProductStatus = REGISTERED,
 
     /** 지역 */
     @Enumerated(EnumType.STRING)
@@ -60,33 +63,15 @@ class Product(
         this.images = images
     }
 
-    fun screen() {
-        require(this.status == ProductStatus.DISAPPROVED)
+    fun approve() {
+        require(this.status == REGISTERED)
 
-        this.status = ProductStatus.SCREENING
+        this.status = AVAILABLE
     }
 
-    fun disapprove() {
-        require(this.status == ProductStatus.SCREENING)
+    fun reject() {
+        require(this.status == REGISTERED)
 
-        this.status = ProductStatus.DISAPPROVED
-    }
-
-    fun cancel() {
-        require(this.status == ProductStatus.SCREENING || this.status == ProductStatus.DISAPPROVED)
-
-        this.status = ProductStatus.CANCELED
-    }
-
-    fun makeAvailable() {
-        require(this.status == ProductStatus.SCREENING || this.status == ProductStatus.UNAVAILABLE)
-
-        this.status = ProductStatus.AVAILABLE
-    }
-
-    fun makeUnavailable() {
-        require(this.status == ProductStatus.AVAILABLE)
-
-        this.status = ProductStatus.UNAVAILABLE
+        this.status = REJECTED
     }
 }

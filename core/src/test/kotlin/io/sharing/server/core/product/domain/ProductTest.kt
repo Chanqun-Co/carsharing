@@ -7,6 +7,9 @@ import io.sharing.server.core.user.domain.User
 import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE
 
 class ProductTest {
 
@@ -32,7 +35,7 @@ class ProductTest {
         assertThat(product.distance).isEqualTo(distance)
         assertThat(product.rentalFee).isEqualTo(rentalFee)
         assertThat(product.licensePlate).isEqualTo(licensePlate)
-        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
+        assertThat(product.status).isEqualTo(ProductStatus.REGISTERED)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
     }
@@ -52,112 +55,48 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 상태 심사로 변경`() {
+    fun `등록된 상품을 승인을 할 수 있다`() {
         val product = createProduct().apply {
-            this.status = ProductStatus.DISAPPROVED
+            this.status = ProductStatus.REGISTERED
         }
 
-        product.screen()
-
-        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
-    }
-
-    @Test
-    fun `상품 상태 심사로 변경 실패 - 이미 상태가 심사인 상품`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.SCREENING
-        }
-
-        assertThatIllegalArgumentException().isThrownBy {
-            product.screen()
-        }
-    }
-
-    @Test
-    fun `상품 상태 거절로 변경`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.DISAPPROVED
-        }
-
-        product.screen()
-
-        assertThat(product.status).isEqualTo(ProductStatus.SCREENING)
-    }
-
-    @Test
-    fun `상품 상태 거절로 변경 실패 - 이미 상태가 거절인 상품`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.DISAPPROVED
-        }
-
-        assertThatIllegalArgumentException().isThrownBy {
-            product.disapprove()
-        }
-    }
-
-    @Test
-    fun `상품 상태 취소로 변경`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.SCREENING
-        }
-
-        product.cancel()
-
-        assertThat(product.status).isEqualTo(ProductStatus.CANCELED)
-    }
-
-    @Test
-    fun `상품 상태 취소로 변경 실패 - 이미 상태가 취소인 상품`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.CANCELED
-        }
-
-        assertThatIllegalArgumentException().isThrownBy {
-            product.cancel()
-        }
-    }
-
-    @Test
-    fun `상품 상태 이용 불가능한 상품으로 변경`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.AVAILABLE
-        }
-
-        product.makeUnavailable()
-
-        assertThat(product.status).isEqualTo(ProductStatus.UNAVAILABLE)
-    }
-
-    @Test
-    fun `상품 상태 이용 불가능한 상품으로 변경 실패 - 이미 상태가 이용 불가능인 상품`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.UNAVAILABLE
-        }
-
-        assertThatIllegalArgumentException().isThrownBy {
-            product.makeUnavailable()
-        }
-    }
-
-    @Test
-    fun `상품 상태 이용 가능한 상품으로 변경`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.UNAVAILABLE
-        }
-
-        product.makeAvailable()
+        product.approve()
 
         assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
     }
 
-    @Test
-    fun `상품 상태 이용 가능한 상품으로 변경 실패 - 이미 이용 가능한 상품`() {
+    @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
+    @ParameterizedTest
+    fun `등록 상태가 아니면 상품 승인 할 수 없다`(status: ProductStatus) {
         val product = createProduct().apply {
-            this.status = ProductStatus.AVAILABLE
+            this.status = status
         }
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.makeAvailable()
+            product.approve()
+        }
+    }
+
+    @Test
+    fun `등록된 상품을 거절할 수 있다`() {
+        val product = createProduct().apply {
+            this.status = ProductStatus.REGISTERED
+        }
+
+        product.reject()
+
+        assertThat(product.status).isEqualTo(ProductStatus.REJECTED)
+    }
+
+    @EnumSource(value = ProductStatus::class, names = ["REJECTED", "AVAILABLE", "UNAVAILABLE"])
+    @ParameterizedTest
+    fun `등록 상태가 아니면 상품을 거절할 수 없다`(status: ProductStatus) {
+        val product = createProduct().apply {
+            this.status = status
+        }
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.reject()
         }
     }
 }
