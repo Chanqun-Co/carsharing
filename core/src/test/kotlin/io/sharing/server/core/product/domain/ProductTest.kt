@@ -55,10 +55,8 @@ class ProductTest {
     }
 
     @Test
-    fun `등록된 상품을 승인을 할 수 있다`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.REGISTERED
-        }
+    fun `상품 승인 성공`() {
+        val product = createProduct(status = ProductStatus.REGISTERED)
 
         product.approve()
 
@@ -67,10 +65,8 @@ class ProductTest {
 
     @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
     @ParameterizedTest
-    fun `등록 상태가 아니면 상품 승인 할 수 없다`(status: ProductStatus) {
-        val product = createProduct().apply {
-            this.status = status
-        }
+    fun `상품 승인 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
+        val product = createProduct(status = status)
 
         assertThatIllegalArgumentException().isThrownBy {
             product.approve()
@@ -78,10 +74,8 @@ class ProductTest {
     }
 
     @Test
-    fun `등록된 상품을 거절할 수 있다`() {
-        val product = createProduct().apply {
-            this.status = ProductStatus.REGISTERED
-        }
+    fun `상품 거절 성공`() {
+        val product = createProduct(status = ProductStatus.REGISTERED)
 
         product.reject()
 
@@ -90,10 +84,8 @@ class ProductTest {
 
     @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
     @ParameterizedTest
-    fun `등록 상태가 아니면 상품을 거절할 수 없다`(status: ProductStatus) {
-        val product = createProduct().apply {
-            this.status = status
-        }
+    fun `상품 거절 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
+        val product = createProduct(status = status)
 
         assertThatIllegalArgumentException().isThrownBy {
             product.reject()
