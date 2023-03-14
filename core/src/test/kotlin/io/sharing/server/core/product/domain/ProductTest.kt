@@ -7,6 +7,9 @@ import io.sharing.server.core.user.domain.User
 import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE
 
 class ProductTest {
 
@@ -50,6 +53,44 @@ class ProductTest {
             "image6", "image7", "image8", "image9", "image10"
         )
     }
+
+    @Test
+    fun `상품 승인 성공`() {
+        val product = createProduct(status = ProductStatus.REGISTERED)
+
+        product.approve()
+
+        assertThat(product.status).isEqualTo(ProductStatus.AVAILABLE)
+    }
+
+    @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
+    @ParameterizedTest
+    fun `상품 승인 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
+        val product = createProduct(status = status)
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.approve()
+        }
+    }
+
+    @Test
+    fun `상품 거절 성공`() {
+        val product = createProduct(status = ProductStatus.REGISTERED)
+
+        product.reject()
+
+        assertThat(product.status).isEqualTo(ProductStatus.REJECTED)
+    }
+
+    @EnumSource(value = ProductStatus::class, names = ["REGISTERED"], mode = EXCLUDE)
+    @ParameterizedTest
+    fun `상품 거절 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
+        val product = createProduct(status = status)
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.reject()
+        }
+    }
 }
 
 fun createProduct(
@@ -59,10 +100,11 @@ fun createProduct(
     distance: Int = 1000,
     rentalFee: Int = 1000,
     licensePlate: String = "사와1234",
+    status: ProductStatus = ProductStatus.AVAILABLE,
     region: Region = Region.GASAN,
     description: String = "test"): Product {
     return Product(
         user, carModel, color, distance = distance, rentalFee = rentalFee,
-        licensePlate, region = region, description = description
+        licensePlate, status, region = region, description = description
     )
 }
