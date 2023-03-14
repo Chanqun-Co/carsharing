@@ -1,7 +1,7 @@
 package io.sharing.server.core.reservation.domain
 
 import io.sharing.server.core.product.domain.Product
-import io.sharing.server.core.product.domain.ProductStatus
+import io.sharing.server.core.product.domain.ProductStatus.*
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
 import io.sharing.server.core.user.domain.User
 import jakarta.persistence.Column
@@ -49,8 +49,9 @@ class Reservation(
         const val MINIMUM_RESERVATION_TIME = 2L
 
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
-            require(product.status == ProductStatus.AVAILABLE)
             require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
+
+            check(product.status == AVAILABLE)
 
             return Reservation(guest, host, product, checkIn, checkOut).apply {
                 this.registerEvent(ReservationCreatedEvent(this))

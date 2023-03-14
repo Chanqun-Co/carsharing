@@ -51,7 +51,7 @@ class User(
     }
 
     fun inactivate() {
-        require(status == ACTIVE)
+        check(status == ACTIVE)
 
         this.status = INACTIVE
     }

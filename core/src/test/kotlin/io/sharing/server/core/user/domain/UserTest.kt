@@ -2,8 +2,7 @@ package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.user.domain.Region.*
 import io.sharing.server.core.user.domain.UserStatus.*
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -51,7 +50,7 @@ internal class UserTest {
             this.status = INACTIVE
         }
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             user.inactivate()
         }
     }
@@ -70,7 +69,7 @@ fun createUser(
     email: String = "woogie@gmail.com",
     firstName: String = "firstName",
     lastName: String = "lastName",
-    birthDay: LocalDate = LocalDate.now(),
+    birthDay: LocalDate = LocalDate.now()
 ): User {
     return User.create(email, firstName, lastName, birthDay)
 }

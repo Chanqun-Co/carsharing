@@ -11,7 +11,6 @@ import io.sharing.server.core.user.application.port.outp.UserRepository
 import io.sharing.server.core.user.domain.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @UseCase
 @Transactional
