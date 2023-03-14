@@ -50,6 +50,7 @@ class Reservation(
 
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
             require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
+
             check(product.status == AVAILABLE)
 
             return Reservation(guest, host, product, checkIn, checkOut).apply {
