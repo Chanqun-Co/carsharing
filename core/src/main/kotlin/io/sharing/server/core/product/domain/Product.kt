@@ -64,13 +64,13 @@ class Product(
     }
 
     fun approve() {
-        require(this.status == REGISTERED)
+        check(this.status == REGISTERED)
 
         this.status = AVAILABLE
     }
 
     fun reject() {
-        require(this.status == REGISTERED)
+        check(this.status == REGISTERED)
 
         this.status = REJECTED
     }
