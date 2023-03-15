@@ -21,4 +21,5 @@ https://github.com/Chanqun-Co/carsharing/wiki
      <td align="center"><a href="https://github.com/NewEgoDoc"><img src="https://avatars.githubusercontent.com/u/53653597?v=4" width="100px" /></a></td>
      <td align="center"><a href="https://github.com/ksh9241"><img src="https://avatars.githubusercontent.com/u/71758819?v=4" width="100px" /></a></td>
     <td align="center"><a href="https://github.com/kimzerovirus"><img src="https://avatars.githubusercontent.com/u/68390715?v=4" width="100px" /></a></td>
-
+  </tr>
+</table>
