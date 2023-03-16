@@ -9,17 +9,17 @@ https://github.com/Chanqun-Co/carsharing/wiki
 ## Team
 <table>
    <tr>
-    <td align="center"><b><a href="https://github.com/woogiekim">woogiekim</a></b></td>
     <td align="center"><b><a href="https://github.com/chanqun">chanqun</a></b></td>
-     <td align="center"><b><a href="https://github.com/NewEgoDoc">NewEgoDoc</a></b></td>
+    <td align="center"><b><a href="https://github.com/woogiekim">woogiekim</a></b></td>
+    <td align="center"><b><a href="https://github.com/NewEgoDoc">NewEgoDoc</a></b></td>
     <td align="center"><b><a href="https://github.com/ksh9241">ksh9241</a></b></td>
     <td align="center"><b><a href="https://github.com/kimzerovirus">kimzerovirus</a></b></td>
   </tr>
   <tr>
-     <td align="center"><a href="https://github.com/woogiekim"><img src="https://avatars.githubusercontent.com/u/58969072?v=4" width="100px" /></a></td>
-     <td align="center"><a href="https://github.com/chanqun"><img src="https://avatars.githubusercontent.com/u/40936047?v=4" width="100px" /></a></td>
-     <td align="center"><a href="https://github.com/NewEgoDoc"><img src="https://avatars.githubusercontent.com/u/53653597?v=4" width="100px" /></a></td>
-     <td align="center"><a href="https://github.com/ksh9241"><img src="https://avatars.githubusercontent.com/u/71758819?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/chanqun"><img src="https://avatars.githubusercontent.com/u/40936047?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/woogiekim"><img src="https://avatars.githubusercontent.com/u/58969072?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/NewEgoDoc"><img src="https://avatars.githubusercontent.com/u/53653597?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/ksh9241"><img src="https://avatars.githubusercontent.com/u/71758819?v=4" width="100px" /></a></td>
     <td align="center"><a href="https://github.com/kimzerovirus"><img src="https://avatars.githubusercontent.com/u/68390715?v=4" width="100px" /></a></td>
   </tr>
 </table>
