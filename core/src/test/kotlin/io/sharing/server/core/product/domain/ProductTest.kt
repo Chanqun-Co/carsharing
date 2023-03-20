@@ -68,7 +68,7 @@ class ProductTest {
     fun `상품 승인 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
         val product = createProduct(status = status)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             product.approve()
         }
     }
@@ -87,7 +87,7 @@ class ProductTest {
     fun `상품 거절 실패 - 등록 상태가 아닌 경우`(status: ProductStatus) {
         val product = createProduct(status = status)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             product.reject()
         }
     }
