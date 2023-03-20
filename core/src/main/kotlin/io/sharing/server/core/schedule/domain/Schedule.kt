@@ -14,7 +14,8 @@ import java.time.OffsetDateTime
 
 /**
  * 스케줄
- * 상품에 대한 예약 불가능한 기간 집합
+ *
+ * 스케줄에 없는 시간은 예약 가능한 시간
  */
 @Entity
 class Schedule(
@@ -33,7 +34,7 @@ class Schedule(
     /** 끝 시간 */
     var endTime: OffsetDateTime,
 
-    /** 체크타입 */
+    /** 타입 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     var type: ScheduleType,
@@ -43,23 +44,25 @@ class Schedule(
 ) : BaseAggregateRoot<Schedule>() {
 
     companion object {
-        const val MINIMUM_ARRANGED_TIME = 1L
+        const val MINIMUM_ARRANGED_HOUR = 1L
 
-        fun createReserved(product: Product, reservation: Reservation): Schedule {
-
-            return Schedule(product = product, reservation = reservation, startTime = reservation.checkIn, endTime = reservation.checkOut, type = ScheduleType.RESERVED).apply {
+        fun createByReservation(product: Product, reservation: Reservation): Schedule {
+            return Schedule(product = product, reservation = reservation, startTime = reservation.checkIn, endTime = reservation.checkOut, type = ScheduleType.RESERVATION).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
         }
 
-        fun createUnavailable(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
-            require(startTime.minute == 0 && startTime.second == 0 && startTime.nano == 0)
-            require(endTime.minute == 0 && endTime.second == 0 && endTime.nano == 0)
-            require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_TIME))
+        fun createByHost(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
+            require(checkTimeOnTheHour(startTime))
+            require(checkTimeOnTheHour(endTime))
+            require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_HOUR))
 
-            return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.UNAVAILABLE).apply {
+            return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.HOST).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
+        }
+        private fun checkTimeOnTheHour(time: OffsetDateTime): Boolean {
+            return time.minute == 0 && time.second == 0 && time.nano == 0
         }
     }
 }

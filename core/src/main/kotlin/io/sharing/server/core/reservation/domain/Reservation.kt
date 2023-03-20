@@ -50,11 +50,17 @@ class Reservation(
 
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
             require(product.status == ProductStatus.AVAILABLE)
+            require(checkTimeOnTheMinute(checkIn))
+            require(checkTimeOnTheMinute(checkOut))
             require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
 
             return Reservation(guest, host, product, checkIn, checkOut).apply {
                 this.registerEvent(ReservationCreatedEvent(this))
             }
+        }
+
+        private fun checkTimeOnTheMinute(time: OffsetDateTime): Boolean {
+            return time.second == 0 && time.nano == 0 && time.minute % 10 == 0
         }
     }
 }
