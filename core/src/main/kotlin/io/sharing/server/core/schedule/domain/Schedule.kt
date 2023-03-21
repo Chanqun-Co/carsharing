@@ -45,24 +45,32 @@ class Schedule(
 
     companion object {
         const val MINIMUM_ARRANGED_HOUR = 1L
+        const val MINIMUM_RESERVATION_TIME = 2L
 
-        fun createByReservation(product: Product, reservation: Reservation): Schedule {
-            return Schedule(product = product, reservation = reservation, startTime = reservation.checkIn, endTime = reservation.checkOut, type = ScheduleType.RESERVATION).apply {
+        fun createReservedSchedule(product: Product, reservation: Reservation): Schedule {
+            with(reservation) {
+                require(checkIn.isOnTheHour())
+                require(checkOut.isOnTheHour())
+                require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
+            }
+
+            return Schedule(product = product, reservation = reservation, startTime = reservation.checkIn, endTime = reservation.checkOut, type = ScheduleType.RESERVED).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
         }
 
-        fun createByHost(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
-            require(checkTimeOnTheHour(startTime))
-            require(checkTimeOnTheHour(endTime))
+        fun createBlockedSchedule(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
+            require(startTime.isOnTheHour())
+            require(endTime.isOnTheHour())
             require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_HOUR))
 
-            return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.HOST).apply {
+            return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.BLOCKED).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
         }
-        private fun checkTimeOnTheHour(time: OffsetDateTime): Boolean {
-            return time.minute == 0 && time.second == 0 && time.nano == 0
-        }
     }
+}
+
+fun OffsetDateTime.isOnTheHour(): Boolean {
+    return this.minute == 0 && this.second == 0 && this.nano == 0
 }

@@ -46,22 +46,12 @@ class Reservation(
 ) : BaseAggregateRoot<Reservation>() {
 
     companion object {
-        const val MINIMUM_RESERVATION_TIME = 2L
-
         fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
-            require(checkTimeOnTheMinute(checkIn))
-            require(checkTimeOnTheMinute(checkOut))
-            require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
-
             check(product.status == AVAILABLE)
 
             return Reservation(guest, host, product, checkIn, checkOut).apply {
                 this.registerEvent(ReservationCreatedEvent(this))
             }
-        }
-
-        private fun checkTimeOnTheMinute(time: OffsetDateTime): Boolean {
-            return time.second == 0 && time.nano == 0 && time.minute % 10 == 0
         }
     }
 }
