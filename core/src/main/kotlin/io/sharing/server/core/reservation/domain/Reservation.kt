@@ -30,12 +30,6 @@ class Reservation(
     @ManyToOne(fetch = FetchType.LAZY)
     val product: Product,
 
-    /** 체크인 */
-    var checkIn: OffsetDateTime,
-
-    /** 체크아웃 */
-    var checkOut: OffsetDateTime,
-
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
@@ -46,10 +40,10 @@ class Reservation(
 ) : BaseAggregateRoot<Reservation>() {
 
     companion object {
-        fun create(guest: User, host: User, product: Product, checkIn: OffsetDateTime, checkOut: OffsetDateTime): Reservation {
+        fun create(guest: User, host: User, product: Product): Reservation {
             check(product.status == AVAILABLE)
 
-            return Reservation(guest, host, product, checkIn, checkOut).apply {
+            return Reservation(guest, host, product).apply {
                 this.registerEvent(ReservationCreatedEvent(this))
             }
         }

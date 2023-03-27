@@ -13,9 +13,9 @@ import jakarta.persistence.OneToOne
 import java.time.OffsetDateTime
 
 /**
- * 스케줄
+ * 일정
  *
- * 스케줄에 없는 시간은 예약 가능한 시간
+ * 상품에 대한 계획된 일정
  */
 @Entity
 class Schedule(
@@ -45,32 +45,30 @@ class Schedule(
 
     companion object {
         const val MINIMUM_ARRANGED_HOUR = 1L
-        const val MINIMUM_RESERVATION_TIME = 2L
+        const val MINIMUM_RESERVABLE_HOUR = 2L
 
-        fun createReservedSchedule(product: Product, reservation: Reservation): Schedule {
-            with(reservation) {
-                require(checkIn.isOnTheHour())
-                require(checkOut.isOnTheHour())
-                require(checkOut >= checkIn.plusHours(MINIMUM_RESERVATION_TIME))
-            }
+        fun createReservedSchedule(product: Product, reservation: Reservation, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
+            require(isValidTime(startTime))
+            require(isValidTime(endTime))
+            require(endTime >= startTime.plusHours(MINIMUM_RESERVABLE_HOUR))
 
-            return Schedule(product = product, reservation = reservation, startTime = reservation.checkIn, endTime = reservation.checkOut, type = ScheduleType.RESERVED).apply {
+            return Schedule(product = product, reservation = reservation, startTime = startTime, endTime = endTime, type = ScheduleType.RESERVED).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
         }
 
         fun createBlockedSchedule(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
-            require(startTime.isOnTheHour())
-            require(endTime.isOnTheHour())
+            require(isValidTime(startTime))
+            require(isValidTime(endTime))
             require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_HOUR))
 
             return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.BLOCKED).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
             }
         }
-    }
-}
 
-fun OffsetDateTime.isOnTheHour(): Boolean {
-    return this.minute == 0 && this.second == 0 && this.nano == 0
+        private fun isValidTime(time: OffsetDateTime): Boolean {
+            return time.minute == 0 && time.second == 0 && time.nano == 0
+        }
+    }
 }
