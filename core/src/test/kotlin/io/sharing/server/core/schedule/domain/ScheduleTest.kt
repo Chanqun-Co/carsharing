@@ -2,7 +2,7 @@ package io.sharing.server.core.schedule.domain
 
 import io.sharing.server.core.product.domain.createProduct
 import io.sharing.server.core.reservation.domain.createReservation
-import io.sharing.server.core.schedule.domain.Schedule.Companion.MINIMUM_ARRANGED_HOUR
+import io.sharing.server.core.schedule.domain.Schedule.Companion.MINIMUM_BLOCKED_HOUR
 import io.sharing.server.core.schedule.domain.Schedule.Companion.MINIMUM_RESERVABLE_HOUR
 import io.sharing.server.core.schedule.domain.Schedule.Companion.createBlockedSchedule
 import io.sharing.server.core.schedule.domain.Schedule.Companion.createReservedSchedule
@@ -34,7 +34,7 @@ class ScheduleTest {
     fun `스케줄 생성 - BLOCKED`() {
         val product = createProduct()
         val startTime = OffsetDateTime.now().withMinute(0).withSecond(0).withNano(0)
-        val endTime = startTime.plusHours(MINIMUM_ARRANGED_HOUR)
+        val endTime = startTime.plusHours(MINIMUM_BLOCKED_HOUR)
 
         val schedule = createBlockedSchedule(product, startTime, endTime)
 
@@ -85,7 +85,7 @@ class ScheduleTest {
     fun `스케줄 생성 실패 - startTime, endTime 사이의 시간차가 1시간 이내일 경우`() {
         val product = createProduct()
         val startTime = OffsetDateTime.now().withMinute(0).withSecond(0).withNano(0)
-        val endTime = startTime.plusHours(MINIMUM_ARRANGED_HOUR).minusHours(1)
+        val endTime = startTime.plusHours(MINIMUM_BLOCKED_HOUR).minusHours(1)
 
         assertThatIllegalArgumentException().isThrownBy {
             createBlockedSchedule(product = product, startTime = startTime, endTime = endTime)

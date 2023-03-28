@@ -44,7 +44,7 @@ class Schedule(
 ) : BaseAggregateRoot<Schedule>() {
 
     companion object {
-        const val MINIMUM_ARRANGED_HOUR = 1L
+        const val MINIMUM_BLOCKED_HOUR = 1L
         const val MINIMUM_RESERVABLE_HOUR = 2L
 
         fun createReservedSchedule(product: Product, reservation: Reservation, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
@@ -60,7 +60,7 @@ class Schedule(
         fun createBlockedSchedule(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
             require(isSharp(startTime))
             require(isSharp(endTime))
-            require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_HOUR))
+            require(endTime >= startTime.plusHours(MINIMUM_BLOCKED_HOUR))
 
             return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.BLOCKED).apply {
                 this.registerEvent(ScheduleCreatedEvent(this))
