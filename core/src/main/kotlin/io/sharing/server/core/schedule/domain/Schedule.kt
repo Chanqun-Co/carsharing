@@ -48,8 +48,8 @@ class Schedule(
         const val MINIMUM_RESERVABLE_HOUR = 2L
 
         fun createReservedSchedule(product: Product, reservation: Reservation, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
-            require(isValidTime(startTime))
-            require(isValidTime(endTime))
+            require(isSharp(startTime))
+            require(isSharp(endTime))
             require(endTime >= startTime.plusHours(MINIMUM_RESERVABLE_HOUR))
 
             return Schedule(product = product, reservation = reservation, startTime = startTime, endTime = endTime, type = ScheduleType.RESERVED).apply {
@@ -58,8 +58,8 @@ class Schedule(
         }
 
         fun createBlockedSchedule(product: Product, startTime: OffsetDateTime, endTime: OffsetDateTime): Schedule {
-            require(isValidTime(startTime))
-            require(isValidTime(endTime))
+            require(isSharp(startTime))
+            require(isSharp(endTime))
             require(endTime >= startTime.plusHours(MINIMUM_ARRANGED_HOUR))
 
             return Schedule(product = product, startTime = startTime, endTime = endTime, type = ScheduleType.BLOCKED).apply {
@@ -67,7 +67,7 @@ class Schedule(
             }
         }
 
-        private fun isValidTime(time: OffsetDateTime): Boolean {
+        private fun isSharp(time: OffsetDateTime): Boolean {
             return time.minute == 0 && time.second == 0 && time.nano == 0
         }
     }
