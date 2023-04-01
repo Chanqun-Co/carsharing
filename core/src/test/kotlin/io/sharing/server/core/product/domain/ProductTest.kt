@@ -41,13 +41,13 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 이미지 추가`() {
+    fun `상품 이미지 변경`() {
         val product = createProduct()
-        val images = (1..10).map { "image$it" }.toMutableList()
+        val images = (1..Product.MAXIMUM_IMAGE_COUNT).map { "image$it" }.toMutableList()
 
         product.updateImages(images)
 
-        assertThat(product.images.size).isEqualTo(10)
+        assertThat(product.images.size).isEqualTo(Product.MAXIMUM_IMAGE_COUNT)
         assertThat(product.images).containsExactlyInAnyOrder(
             "image1", "image2", "image3", "image4", "image5",
             "image6", "image7", "image8", "image9", "image10"
@@ -55,9 +55,10 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 이미지 추가 실패 - 이미지가 10개를 초과한 경우`() {
+    fun `상품 이미지 변경 실패 - 등록 가능한 이미지 개수를 초과한 경우`() {
         val product = createProduct()
-        val images = (1..11).map { "image$it" }.toMutableList()
+        val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
+        val images = (1..imageCount).map { "image$it" }.toMutableList()
 
         assertThatIllegalStateException().isThrownBy {
             product.updateImages(images)
