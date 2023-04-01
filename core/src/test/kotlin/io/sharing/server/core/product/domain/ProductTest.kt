@@ -55,7 +55,7 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 이미지 변경 실패 - 등록 가능한 이미지 개수를 초과한 경우`() {
+    fun `상품 이미지 변경 실패 - 변경 가능한 이미지 개수를 초과한 경우`() {
         val product = createProduct()
         val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
         val images = (1..imageCount).map { "image$it" }.toMutableList()
