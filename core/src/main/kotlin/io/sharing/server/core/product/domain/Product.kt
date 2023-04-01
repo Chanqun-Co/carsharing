@@ -60,6 +60,8 @@ class Product(
     var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
     fun updateImages(images: MutableList<String>) {
+        check(images.size <= MAXIMUM_IMAGE_COUNT)
+
         this.images = images
     }
 
@@ -73,5 +75,9 @@ class Product(
         check(this.status == REGISTERED)
 
         this.status = REJECTED
+    }
+
+    companion object {
+        const val MAXIMUM_IMAGE_COUNT = 10
     }
 }
