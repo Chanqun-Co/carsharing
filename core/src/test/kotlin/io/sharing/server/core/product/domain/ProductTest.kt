@@ -55,6 +55,16 @@ class ProductTest {
     }
 
     @Test
+    fun `상품 이미지 추가 실패 - 이미지가 10개를 초과한 경우`() {
+        val product = createProduct()
+        val images = (1..11).map { "image$it" }.toMutableList()
+
+        assertThatIllegalStateException().isThrownBy {
+            product.updateImages(images)
+        }
+    }
+
+    @Test
     fun `상품 승인 성공`() {
         val product = createProduct(status = ProductStatus.REGISTERED)
 
