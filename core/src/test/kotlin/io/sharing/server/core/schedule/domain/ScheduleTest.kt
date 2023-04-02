@@ -52,7 +52,7 @@ class ScheduleTest {
         val reservation = createReservation()
         val endTime = startTime.plusHours(MINIMUM_RESERVABLE_HOUR + 1).withMinute(0).withSecond(0).withNano(0)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             createReservedSchedule(product, reservation, startTime, endTime)
         }
     }
@@ -64,7 +64,7 @@ class ScheduleTest {
         val reservation = createReservation()
         val startTime = endTime.minusHours(MINIMUM_RESERVABLE_HOUR + 1).withMinute(0).withSecond(0).withNano(0)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             createReservedSchedule(product, reservation, startTime, endTime)
         }
     }
@@ -76,7 +76,7 @@ class ScheduleTest {
         val startTime = OffsetDateTime.now().withMinute(0).withSecond(0).withNano(0)
         val endTime = startTime.plusHours(MINIMUM_RESERVABLE_HOUR).minusHours(1)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             createReservedSchedule(product, reservation, startTime, endTime)
         }
     }
@@ -87,7 +87,7 @@ class ScheduleTest {
         val startTime = OffsetDateTime.now().withMinute(0).withSecond(0).withNano(0)
         val endTime = startTime.plusHours(MINIMUM_BLOCKED_HOUR).minusHours(1)
 
-        assertThatIllegalArgumentException().isThrownBy {
+        assertThatIllegalStateException().isThrownBy {
             createBlockedSchedule(product = product, startTime = startTime, endTime = endTime)
         }
     }
