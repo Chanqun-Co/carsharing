@@ -38,6 +38,10 @@ class Reservation(
     /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<Reservation>() {
+    fun changeStatus(status: ReservationStatus) {
+        check(this.status.isAbleToChangeTo(status))
+        this.status = status
+    }
 
     companion object {
         fun create(guest: User, host: User, product: Product): Reservation {

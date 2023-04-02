@@ -3,7 +3,7 @@ package io.sharing.server.core.reservation.domain
 import io.sharing.server.core.product.domain.Product
 import io.sharing.server.core.product.domain.ProductStatus
 import io.sharing.server.core.product.domain.createProduct
-import io.sharing.server.core.reservation.domain.ReservationStatus.PENDING
+import io.sharing.server.core.reservation.domain.ReservationStatus.*
 import io.sharing.server.core.user.domain.User
 import io.sharing.server.core.user.domain.createUser
 import org.assertj.core.api.Assertions.*
@@ -34,6 +34,26 @@ class ReservationTest {
 
         assertThatIllegalStateException().isThrownBy {
             createReservation(product = product)
+        }
+    }
+
+    @Test
+    fun `예약 상태 변경`() {
+        val reservation = createReservation()
+        val status = APPROVED
+
+        reservation.changeStatus(status)
+
+        assertThat(reservation.status).isEqualTo(status)
+    }
+
+    @Test
+    fun `예약 상태 변경 실패`() {
+        val reservation = createReservation()
+        val status = CANCELED
+
+        assertThatIllegalStateException().isThrownBy {
+            reservation.changeStatus(status)
         }
     }
 }
