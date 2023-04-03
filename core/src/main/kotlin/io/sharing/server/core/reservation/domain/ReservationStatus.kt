@@ -29,11 +29,6 @@ enum class ReservationStatus(vararg status: ReservationStatus) {
     private val nextStatuses = status.toList()
 
     fun isAbleToChangeTo(status: ReservationStatus): Boolean {
-        for (next in nextStatuses) {
-            if (status == next) {
-                return true
-            }
-        }
-        return false
+        return status in nextStatuses
     }
 }

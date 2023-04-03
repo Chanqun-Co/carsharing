@@ -2,6 +2,7 @@ package io.sharing.server.core.reservation.domain
 
 import io.sharing.server.core.product.domain.Product
 import io.sharing.server.core.product.domain.ProductStatus.*
+import io.sharing.server.core.reservation.domain.ReservationStatus.*
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
 import io.sharing.server.core.user.domain.User
 import jakarta.persistence.Column
@@ -33,14 +34,33 @@ class Reservation(
     /** 상태 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    var status: ReservationStatus = ReservationStatus.PENDING,
+    var status: ReservationStatus = PENDING,
 
     /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<Reservation>() {
-    fun changeStatus(status: ReservationStatus) {
-        check(this.status.isAbleToChangeTo(status))
-        this.status = status
+    fun approve() {
+        check(status.isAbleToChangeTo(APPROVED))
+
+        this.status = APPROVED
+    }
+
+    fun disapprove() {
+        check(status.isAbleToChangeTo(DISAPPROVED))
+
+        this.status = DISAPPROVED
+    }
+
+    fun requestCancellation() {
+        check(status.isAbleToChangeTo(CANCELLATION_REQUEST))
+
+        this.status = CANCELLATION_REQUEST
+    }
+
+    fun cancel() {
+        check(status.isAbleToChangeTo(CANCELED))
+
+        this.status = CANCELED
     }
 
     companion object {
