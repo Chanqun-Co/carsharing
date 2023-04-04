@@ -23,10 +23,11 @@ class ProductTest {
         val licensePlate = "사와1234"
         val region = Region.DANGSAN
         val description = "TestTest"
+        val images = mutableListOf("image")
 
         val product = Product(
             user, carModel, color, distance = distance, rentalFee = rentalFee,
-            licensePlate, region = region, description = description
+            licensePlate, region = region, description = description, images = images
         )
 
         assertThat(product.carModel).isEqualTo(carModel)
@@ -38,6 +39,26 @@ class ProductTest {
         assertThat(product.status).isEqualTo(ProductStatus.REGISTERED)
         assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
+        assertThat(product.images).isEqualTo(images)
+    }
+
+    @Test
+    fun `상품 생성 실패 - 대여료가 정상값이 아닌 경우`() {
+        val rentalFee = -1
+
+        assertThatIllegalStateException().isThrownBy {
+            createProduct(rentalFee = rentalFee)
+        }
+    }
+
+    @Test
+    fun `상품 생성 실패 - 등록 가능한 이미지 개수를 초과한 경우`() {
+        val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
+        val images = (1..imageCount).map { "image$it" }.toMutableList()
+
+        assertThatIllegalStateException().isThrownBy {
+            createProduct(images = images)
+        }
     }
 
     @Test
@@ -113,9 +134,10 @@ fun createProduct(
     licensePlate: String = "사와1234",
     status: ProductStatus = ProductStatus.AVAILABLE,
     region: Region = Region.GASAN,
-    description: String = "test"): Product {
-    return Product(
+    description: String = "test",
+    images: MutableList<String> = mutableListOf()): Product {
+    return Product.create(
         user, carModel, color, distance = distance, rentalFee = rentalFee,
-        licensePlate, status, region = region, description = description
+        licensePlate, status, region = region, description = description, images
     )
 }
