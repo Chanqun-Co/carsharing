@@ -36,30 +36,37 @@ class Reservation(
     @Column(length = 20, nullable = false)
     var status: ReservationStatus = PENDING,
 
+    /** 상태변경일시 */
+    var updatedAt: OffsetDateTime? = null,
+
     /** 생성일시 */
     val createdAt: OffsetDateTime = OffsetDateTime.now()
 ) : BaseAggregateRoot<Reservation>() {
     fun approve() {
-        check(status.isAbleToChangeTo(APPROVED))
+        check(status.canChangeTo(APPROVED))
 
+        this.updatedAt = OffsetDateTime.now()
         this.status = APPROVED
     }
 
-    fun disapprove() {
-        check(status.isAbleToChangeTo(DISAPPROVED))
+    fun reject() {
+        check(status.canChangeTo(ReservationStatus.REJECTED))
 
-        this.status = DISAPPROVED
+        this.updatedAt = OffsetDateTime.now()
+        this.status = ReservationStatus.REJECTED
     }
 
     fun requestCancellation() {
-        check(status.isAbleToChangeTo(CANCELLATION_REQUEST))
+        check(status.canChangeTo(CANCELLATION_REQUEST))
 
+        this.updatedAt = OffsetDateTime.now()
         this.status = CANCELLATION_REQUEST
     }
 
     fun cancel() {
-        check(status.isAbleToChangeTo(CANCELED))
+        check(status.canChangeTo(CANCELED))
 
+        this.updatedAt = OffsetDateTime.now()
         this.status = CANCELED
     }
 

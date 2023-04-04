@@ -38,7 +38,7 @@ class ReservationTest {
     }
 
     @Test
-    fun `예약 승인 `() {
+    fun `예약 승인`() {
         val reservation = createReservation()
 
         reservation.approve()
@@ -49,12 +49,10 @@ class ReservationTest {
     @ParameterizedTest
     @EnumSource(value = ReservationStatus::class, names = ["PENDING"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 승인 실패`(status: ReservationStatus) {
-        val reservation = createReservation()
-        reservation.status = status
+        val reservation = createReservation(status = status)
 
         assertThatIllegalStateException().isThrownBy {
             reservation.approve()
-            reservation.disapprove()
         }
     }
 
@@ -62,19 +60,19 @@ class ReservationTest {
     fun `예약 거절`() {
         val reservation = createReservation()
 
-        reservation.disapprove()
+        reservation.reject()
 
-        assertThat(reservation.status).isEqualTo(DISAPPROVED)
+        assertThat(reservation.status).isEqualTo(REJECTED)
+        assertThat(reservation.updatedAt).isNotNull
     }
 
     @ParameterizedTest
     @EnumSource(value = ReservationStatus::class, names = ["PENDING"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 거절 실패`(status: ReservationStatus) {
-        val reservation = createReservation()
-        reservation.status = status
+        val reservation = createReservation(status = status)
 
         assertThatIllegalStateException().isThrownBy {
-            reservation.disapprove()
+            reservation.reject()
         }
     }
 
@@ -90,8 +88,7 @@ class ReservationTest {
     @ParameterizedTest
     @EnumSource(value = ReservationStatus::class, names = ["APPROVED"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 취소 요청 실패`(status: ReservationStatus) {
-        val reservation = createReservation()
-        reservation.status = status
+        val reservation = createReservation(status = status)
 
         assertThatIllegalStateException().isThrownBy {
             reservation.requestCancellation()
@@ -111,8 +108,7 @@ class ReservationTest {
     @ParameterizedTest
     @EnumSource(value = ReservationStatus::class, names = ["CANCELLATION_REQUEST"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 취소 실패`(status: ReservationStatus) {
-        val reservation = createReservation()
-        reservation.status = status
+        val reservation = createReservation(status = status)
 
         assertThatIllegalStateException().isThrownBy {
             reservation.cancel()
@@ -124,6 +120,9 @@ fun createReservation(
     guest: User = createUser(email = "juhan211@naver.com", firstName = "Juhan", lastName = "Byeon"),
     host: User = createUser(),
     product: Product = createProduct(),
+    status: ReservationStatus = PENDING
 ): Reservation {
-    return Reservation.create(guest, host, product)
+    return Reservation.create(guest, host, product).apply {
+        this.status = status
+    }
 }

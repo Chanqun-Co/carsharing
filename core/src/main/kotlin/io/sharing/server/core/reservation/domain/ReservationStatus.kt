@@ -12,7 +12,7 @@ package io.sharing.server.core.reservation.domain
  */
 enum class ReservationStatus(vararg status: ReservationStatus) {
     /** 거절 */
-    DISAPPROVED(),
+    REJECTED(),
 
     /** 취소됨 */
     CANCELED(),
@@ -24,11 +24,11 @@ enum class ReservationStatus(vararg status: ReservationStatus) {
     APPROVED(CANCELLATION_REQUEST),
 
     /** 승인 대기 */
-    PENDING(APPROVED, DISAPPROVED);
+    PENDING(APPROVED, REJECTED);
 
     private val nextStatuses = status.toList()
 
-    fun isAbleToChangeTo(status: ReservationStatus): Boolean {
+    fun canChangeTo(status: ReservationStatus): Boolean {
         return status in nextStatuses
     }
 }
