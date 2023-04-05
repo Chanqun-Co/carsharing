@@ -46,7 +46,7 @@ class ProductTest {
     fun `상품 생성 실패 - 대여료가 정상값이 아닌 경우`() {
         val rentalFee = -1
 
-        assertThatIllegalStateException().isThrownBy {
+        assertThatIllegalArgumentException().isThrownBy {
             createProduct(rentalFee = rentalFee)
         }
     }
@@ -56,7 +56,7 @@ class ProductTest {
         val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
         val images = (1..imageCount).map { "image$it" }.toMutableList()
 
-        assertThatIllegalStateException().isThrownBy {
+        assertThatIllegalArgumentException().isThrownBy {
             createProduct(images = images)
         }
     }
@@ -81,7 +81,7 @@ class ProductTest {
         val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
         val images = (1..imageCount).map { "image$it" }.toMutableList()
 
-        assertThatIllegalStateException().isThrownBy {
+        assertThatIllegalArgumentException().isThrownBy {
             product.updateImages(images)
         }
     }
@@ -135,7 +135,8 @@ fun createProduct(
     status: ProductStatus = ProductStatus.AVAILABLE,
     region: Region = Region.GASAN,
     description: String = "test",
-    images: MutableList<String> = mutableListOf()): Product {
+    images: MutableList<String> = mutableListOf()
+): Product {
     return Product.create(
         user, carModel, color, distance = distance, rentalFee = rentalFee,
         licensePlate, status, region = region, description = description, images

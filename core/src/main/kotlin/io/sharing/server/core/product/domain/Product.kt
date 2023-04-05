@@ -61,7 +61,7 @@ class Product(
     var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
     fun updateImages(images: MutableList<String>) {
-        check(images.size <= MAXIMUM_IMAGE_COUNT)
+        require(images.size <= MAXIMUM_IMAGE_COUNT)
 
         this.images = images
     }
@@ -85,8 +85,8 @@ class Product(
             user: User, carModel: CarModel, color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,
             status: ProductStatus, region: Region, description: String, images: MutableList<String>
         ): Product {
-            check(rentalFee > 0)
-            check(images.size <= MAXIMUM_IMAGE_COUNT)
+            require(rentalFee > 0)
+            require(images.size <= MAXIMUM_IMAGE_COUNT)
 
             return Product(
                 user, carModel, color, distance = distance, rentalFee = rentalFee,
