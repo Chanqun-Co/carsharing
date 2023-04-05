@@ -6,7 +6,6 @@ import io.sharing.server.core.support.jpa.BaseAggregateRoot
 import io.sharing.server.core.user.domain.Region
 import io.sharing.server.core.user.domain.User
 import jakarta.persistence.*
-import org.bouncycastle.asn1.x500.style.RFC4519Style.description
 
 /**
  * 상품
@@ -85,7 +84,7 @@ class Product(
             user: User, carModel: CarModel, color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,
             status: ProductStatus, region: Region, description: String, images: MutableList<String>
         ): Product {
-            require(rentalFee > 0)
+            require(rentalFee >= 0)
             require(images.size <= MAXIMUM_IMAGE_COUNT)
 
             return Product(

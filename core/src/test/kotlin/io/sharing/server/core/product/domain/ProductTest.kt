@@ -43,7 +43,7 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 생성 실패 - 대여료가 정상값이 아닌 경우`() {
+    fun `상품 생성 실패 - 대여료가 음수인 경우`() {
         val rentalFee = -1
 
         assertThatIllegalArgumentException().isThrownBy {
