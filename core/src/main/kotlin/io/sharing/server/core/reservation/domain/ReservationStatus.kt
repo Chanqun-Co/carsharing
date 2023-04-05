@@ -1,20 +1,34 @@
 package io.sharing.server.core.reservation.domain
 
-enum class ReservationStatus {
-    // TODO: 다음으로 넘어가는 메소드
-
-    /** 승인 대기 */
-    PENDING,
-
-    /** 승인 */
-    APPROVED,
-
+/**
+ * 호스트의 경우
+ * PENDING -> APPROVED
+ *         -> DISAPPROVED
+ *
+ * CANCELLATION_REQUEST -> CANCELED
+ *
+ * 게스트의 경우
+ * APPROVED -> CANCELLATION_REQUEST
+ */
+enum class ReservationStatus(vararg status: ReservationStatus) {
     /** 거절 */
-    UNAPPROVED,
-
-    /** 취소 요청 */
-    CANCELLATION_REQUEST,
+    REJECTED(),
 
     /** 취소됨 */
-    CANCELED
+    CANCELED(),
+
+    /** 취소 요청 */
+    CANCELLATION_REQUEST(CANCELED),
+
+    /** 승인 */
+    APPROVED(CANCELLATION_REQUEST),
+
+    /** 승인 대기 */
+    PENDING(APPROVED, REJECTED);
+
+    private val nextStatuses = status.toList()
+
+    fun canChangeTo(status: ReservationStatus): Boolean {
+        return status in nextStatuses
+    }
 }
