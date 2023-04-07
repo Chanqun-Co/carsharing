@@ -60,7 +60,7 @@ class Product(
     var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
     fun updateImages(images: MutableList<String>) {
-        check(images.size <= MAXIMUM_IMAGE_COUNT)
+        require(images.size <= MAXIMUM_IMAGE_COUNT)
 
         this.images = images
     }
@@ -79,5 +79,18 @@ class Product(
 
     companion object {
         const val MAXIMUM_IMAGE_COUNT = 10
+
+        fun create(
+            user: User, carModel: CarModel, color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,
+            status: ProductStatus, region: Region, description: String, images: MutableList<String>
+        ): Product {
+            require(rentalFee >= 0)
+            require(images.size <= MAXIMUM_IMAGE_COUNT)
+
+            return Product(
+                user, carModel, color, distance = distance, rentalFee = rentalFee,
+                licensePlate, status, region = region, description = description, images = images
+            )
+        }
     }
 }
