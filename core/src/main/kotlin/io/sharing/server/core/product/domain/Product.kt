@@ -48,7 +48,7 @@ class Product(
     /** 지역 */
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    val region: Region,
+    var region: Region,
 
     /** 설명 */
     @Column(columnDefinition = "TEXT")
@@ -59,9 +59,19 @@ class Product(
     @CollectionTable(name = "product_img", joinColumns = [JoinColumn(name = "product_id")])
     var images: MutableList<String> = mutableListOf(),
 ) : BaseAggregateRoot<Product>() {
-    fun updateImages(images: MutableList<String>) {
+    fun update(
+        color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,
+        region: Region, description: String, images: MutableList<String>
+    ) {
+        require(rentalFee >= MINIMUM_FEE)
         require(images.size <= MAXIMUM_IMAGE_COUNT)
 
+        this.color = color
+        this.distance = distance
+        this.rentalFee = rentalFee
+        this.licensePlate = licensePlate
+        this.region = region
+        this.description = description
         this.images = images
     }
 
@@ -79,12 +89,13 @@ class Product(
 
     companion object {
         const val MAXIMUM_IMAGE_COUNT = 10
+        const val MINIMUM_FEE = 0
 
         fun create(
             user: User, carModel: CarModel, color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,
             status: ProductStatus, region: Region, description: String, images: MutableList<String>
         ): Product {
-            require(rentalFee >= 0)
+            require(rentalFee >= MINIMUM_FEE)
             require(images.size <= MAXIMUM_IMAGE_COUNT)
 
             return Product(
