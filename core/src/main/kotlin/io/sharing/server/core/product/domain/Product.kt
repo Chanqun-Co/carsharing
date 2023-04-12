@@ -88,8 +88,8 @@ class Product(
     }
 
     companion object {
-        const val MAXIMUM_IMAGE_COUNT = 10
         const val MINIMUM_FEE = 0
+        const val MAXIMUM_IMAGE_COUNT = 10
 
         fun create(
             user: User, carModel: CarModel, color: ProductColor, distance: Int, rentalFee: Int, licensePlate: String,

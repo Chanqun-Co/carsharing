@@ -74,8 +74,11 @@ class ProductTest {
 
         product.update(color, distance = distance, rentalFee = rentalFee, licensePlate, region, description, images)
 
+        assertThat(product.color).isEqualTo(color)
         assertThat(product.distance).isEqualTo(distance)
         assertThat(product.rentalFee).isEqualTo(rentalFee)
+        assertThat(product.licensePlate).isEqualTo(licensePlate)
+        assertThat(product.region).isEqualTo(region)
         assertThat(product.description).isEqualTo(description)
         assertThat(product.images.size).isEqualTo(Product.MAXIMUM_IMAGE_COUNT)
         assertThat(product.images).containsExactlyInAnyOrder(
