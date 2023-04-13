@@ -62,12 +62,24 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 이미지 변경`() {
+    fun `상품 정보 수정`() {
         val product = createProduct()
+        val color = ProductColor.WHITE
+        val distance = 10000
+        val rentalFee = 100000
+        val licensePlate = "가나1234"
+        val region = Region.GASAN
+        val description = "updated info"
         val images = (1..Product.MAXIMUM_IMAGE_COUNT).map { "image$it" }.toMutableList()
 
-        product.updateImages(images)
+        product.update(color, distance = distance, rentalFee = rentalFee, licensePlate, region, description, images)
 
+        assertThat(product.color).isEqualTo(color)
+        assertThat(product.distance).isEqualTo(distance)
+        assertThat(product.rentalFee).isEqualTo(rentalFee)
+        assertThat(product.licensePlate).isEqualTo(licensePlate)
+        assertThat(product.region).isEqualTo(region)
+        assertThat(product.description).isEqualTo(description)
         assertThat(product.images.size).isEqualTo(Product.MAXIMUM_IMAGE_COUNT)
         assertThat(product.images).containsExactlyInAnyOrder(
             "image1", "image2", "image3", "image4", "image5",
@@ -76,13 +88,35 @@ class ProductTest {
     }
 
     @Test
-    fun `상품 이미지 변경 실패 - 변경 가능한 이미지 개수를 초과한 경우`() {
+    fun `상품 정보 수정 실패 - 대여료가 음수인 경우`() {
         val product = createProduct()
+        val color = ProductColor.WHITE
+        val distance = 10000
+        val rentalFee = -1
+        val licensePlate = "가나1234"
+        val region = Region.GASAN
+        val description = "updated info"
+        val images = (1..Product.MAXIMUM_IMAGE_COUNT).map { "image$it" }.toMutableList()
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.update(color, distance = distance, rentalFee = rentalFee, licensePlate, region, description, images)
+        }
+    }
+
+    @Test
+    fun `상품 정보 수정 실패 - 변경 가능한 이미지 개수를 초과한 경우`() {
+        val product = createProduct()
+        val color = ProductColor.WHITE
+        val distance = 10000
+        val rentalFee = 100000
+        val licensePlate = "가나1234"
+        val region = Region.GASAN
+        val description = "updated info"
         val imageCount = Product.MAXIMUM_IMAGE_COUNT + 1
         val images = (1..imageCount).map { "image$it" }.toMutableList()
 
         assertThatIllegalArgumentException().isThrownBy {
-            product.updateImages(images)
+            product.update(color, distance = distance, rentalFee = rentalFee, licensePlate, region, description, images)
         }
     }
 
