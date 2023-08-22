@@ -43,9 +43,6 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("io.github.microutils:kotlin-logging:1.12.5")
 
-        implementation("org.springframework.boot:spring-boot-starter-security")
-        testImplementation("org.springframework.security:spring-security-test")
-
         runtimeOnly("com.mysql:mysql-connector-j")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         implementation("org.springframework.boot:spring-boot-starter-security")
