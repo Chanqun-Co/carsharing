@@ -1,6 +1,7 @@
 package io.sharing.server.core.user.domain
 
 import io.sharing.server.core.support.jpa.BaseAggregateRoot
+import io.sharing.server.core.user.domain.Role.*
 import io.sharing.server.core.user.domain.UserStatus.*
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -32,6 +33,11 @@ class User(
 
     /** 생일 */
     val birthDay: LocalDate,
+
+    /** 권한 */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    val role: Role = GUEST,
 
     /** 상태 */
     @Enumerated(EnumType.STRING)
