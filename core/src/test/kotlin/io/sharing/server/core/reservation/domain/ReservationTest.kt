@@ -81,9 +81,9 @@ class ReservationTest {
     fun `예약 취소 요청`() {
         val reservation = createReservation(status = APPROVED)
 
-        reservation.requestCancellation()
+        reservation.requestCancel()
 
-        assertThat(reservation.status).isEqualTo(CANCELLATION_REQUEST)
+        assertThat(reservation.status).isEqualTo(REQUEST_CANCEL)
         assertThat(reservation.updatedAt).isNotNull
     }
 
@@ -93,13 +93,13 @@ class ReservationTest {
         val reservation = createReservation(status = status)
 
         assertThatIllegalStateException().isThrownBy {
-            reservation.requestCancellation()
+            reservation.requestCancel()
         }
     }
 
     @Test
     fun `예약 취소`() {
-        val reservation = createReservation(status = CANCELLATION_REQUEST)
+        val reservation = createReservation(status = REQUEST_CANCEL)
 
         reservation.cancel()
 

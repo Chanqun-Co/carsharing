@@ -56,11 +56,11 @@ class Reservation(
         this.status = ReservationStatus.REJECTED
     }
 
-    fun requestCancellation() {
-        check(status.canChangeTo(CANCELLATION_REQUEST))
+    fun requestCancel() {
+        check(status.canChangeTo(REQUEST_CANCEL))
 
         this.updatedAt = OffsetDateTime.now()
-        this.status = CANCELLATION_REQUEST
+        this.status = REQUEST_CANCEL
     }
 
     fun cancel() {
