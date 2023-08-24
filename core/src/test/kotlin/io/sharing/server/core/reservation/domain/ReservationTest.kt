@@ -108,7 +108,7 @@ class ReservationTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ReservationStatus::class, names = ["CANCELLATION_REQUEST"], mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = ReservationStatus::class, names = ["REQUEST_CANCEL"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 취소 실패`(status: ReservationStatus) {
         val reservation = createReservation(status = status)
 
