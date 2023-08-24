@@ -44,6 +44,7 @@ class ReservationTest {
         reservation.approve()
 
         assertThat(reservation.status).isEqualTo(APPROVED)
+        assertThat(reservation.updatedAt).isNotNull
     }
 
     @ParameterizedTest
@@ -78,13 +79,14 @@ class ReservationTest {
 
     @Test
     fun `예약 취소 요청`() {
-        val reservation = createReservation()
-        reservation.status = APPROVED
+        val reservation = createReservation(status = APPROVED)
 
         reservation.requestCancellation()
 
         assertThat(reservation.status).isEqualTo(CANCELLATION_REQUEST)
+        assertThat(reservation.updatedAt).isNotNull
     }
+
     @ParameterizedTest
     @EnumSource(value = ReservationStatus::class, names = ["APPROVED"], mode = EnumSource.Mode.EXCLUDE)
     fun `예약 취소 요청 실패`(status: ReservationStatus) {
@@ -97,12 +99,12 @@ class ReservationTest {
 
     @Test
     fun `예약 취소`() {
-        val reservation = createReservation()
-        reservation.status = CANCELLATION_REQUEST
+        val reservation = createReservation(status = CANCELLATION_REQUEST)
 
         reservation.cancel()
 
         assertThat(reservation.status).isEqualTo(CANCELED)
+        assertThat(reservation.updatedAt).isNotNull
     }
 
     @ParameterizedTest
