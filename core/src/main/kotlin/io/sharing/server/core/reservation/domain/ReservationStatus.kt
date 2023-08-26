@@ -5,10 +5,10 @@ package io.sharing.server.core.reservation.domain
  * PENDING -> APPROVED
  *         -> DISAPPROVED
  *
- * CANCELLATION_REQUEST -> CANCELED
+ * REQUEST_CANCEL -> CANCELED
  *
  * 게스트의 경우
- * APPROVED -> CANCELLATION_REQUEST
+ * APPROVED -> REQUEST_CANCEL
  */
 enum class ReservationStatus(vararg status: ReservationStatus) {
     /** 거절 */
@@ -18,10 +18,10 @@ enum class ReservationStatus(vararg status: ReservationStatus) {
     CANCELED(),
 
     /** 취소 요청 */
-    CANCELLATION_REQUEST(CANCELED),
+    REQUEST_CANCEL(CANCELED),
 
     /** 승인 */
-    APPROVED(CANCELLATION_REQUEST),
+    APPROVED(REQUEST_CANCEL),
 
     /** 승인 대기 */
     PENDING(APPROVED, REJECTED);
