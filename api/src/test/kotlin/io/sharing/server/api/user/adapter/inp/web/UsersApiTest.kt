@@ -49,7 +49,7 @@ internal class UsersApiTest(
                         fieldWithPath("email").description("email"),
                         fieldWithPath("firstName").description("firstName"),
                         fieldWithPath("lastName").description("lastName"),
-                        fieldWithPath("birthDay").description("birthDay"),
+                        fieldWithPath("birthDay").description("birthDay(YYYY-MM-DD)"),
                     )
                 )
         )

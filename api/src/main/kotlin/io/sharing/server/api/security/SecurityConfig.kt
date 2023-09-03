@@ -17,9 +17,11 @@ class SecurityConfig {
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity.csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/users/**").permitAll()
-                    .anyRequest().authenticated() }
-            .build()
+                it
+                    .requestMatchers("/docs/**").permitAll()
+                    .requestMatchers("/users/**").permitAll()
+                    .anyRequest().authenticated()
+            }.build()
     }
 
     @Bean

@@ -133,7 +133,7 @@ project(":api") {
 
         doLast {
             copy {
-                from(file("build/asciidoc/html5"))
+                from(file("build/docs/asciidoc"))
                 into(file("src/main/resources/static/docs"))
             }
         }
