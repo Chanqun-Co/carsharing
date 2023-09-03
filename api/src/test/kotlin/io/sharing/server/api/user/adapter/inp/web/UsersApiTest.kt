@@ -6,6 +6,8 @@ import io.sharing.server.core.user.application.port.outp.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
@@ -25,7 +27,7 @@ internal class UsersApiTest(
 
         jacksonObjectMapper()
 
-        mockMvc.perform(
+        val resultActions = mockMvc.perform(
             post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
@@ -40,6 +42,17 @@ internal class UsersApiTest(
         assertThat(foundUser.lastName).isEqualTo(req.lastName)
         assertThat(foundUser.birthDay).isEqualTo(req.birthDay)
         assertThat(foundUser.createdAt).isNotNull
+
+        resultActions.andDo(
+            document("users",
+                    requestFields(
+                        fieldWithPath("email").description("email"),
+                        fieldWithPath("firstName").description("firstName"),
+                        fieldWithPath("lastName").description("lastName"),
+                        fieldWithPath("birthDay").description("birthDay(YYYY-MM-DD)"),
+                    )
+                )
+        )
     }
 
     @Test
