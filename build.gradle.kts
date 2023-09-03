@@ -6,6 +6,7 @@ plugins {
     id("org.springframework.boot") version "3.0.2"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.asciidoctor.jvm.convert") version "3.3.2"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
     kotlin("plugin.jpa") version "1.7.22"
@@ -30,6 +31,7 @@ subprojects {
         plugin("kotlin-spring")
         plugin("kotlin-jpa")
         plugin("kotlin-allopen")
+        plugin("org.asciidoctor.jvm.convert")
     }
 
     dependencies {
@@ -93,8 +95,14 @@ project(":core") {
 }
 
 project(":api") {
+    val asciidoctorExtensions: Configuration by configurations.creating
+    val snippetsDir = file("build/generated-snippets")
+
     dependencies {
         implementation(project(":core"))
+
+        asciidoctorExtensions("org.springframework.restdocs:spring-restdocs-asciidoctor")
+        testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
 //        implementation("org.flywaydb:flyway-core:7.7.3")
     }
@@ -105,5 +113,33 @@ project(":api") {
 
     tasks.register<Zip>("zip") {
         dependsOn("bootJar")
+    }
+
+    tasks.withType<Test> {
+        outputs.dir(snippetsDir)
+    }
+
+    tasks.asciidoctor {
+        configurations(asciidoctorExtensions.name)
+
+        inputs.dir(snippetsDir)
+        dependsOn(tasks.test)
+
+        doFirst {
+            delete {
+                file("src/main/resources/static/docs")
+            }
+        }
+
+        doLast {
+            copy {
+                from(file("build/asciidoc/html5"))
+                into(file("src/main/resources/static/docs"))
+            }
+        }
+    }
+
+    tasks.build {
+        dependsOn(tasks.asciidoctor)
     }
 }
