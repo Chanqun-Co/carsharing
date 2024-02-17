@@ -96,7 +96,7 @@ project(":core") {
 
 project(":api") {
     val asciidoctorExtensions: Configuration by configurations.creating
-    val snippetsDir = file("build/generated-snippets")
+    val snippetsDir = file("build/generatedx-snippets")
 
     dependencies {
         implementation(project(":core"))
