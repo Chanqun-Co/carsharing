@@ -1,0 +1,9 @@
+[submodule "ca-reservation"]
+	path = ca-reservation
+	url = https://github.com/Chanqun-Co/ca-reservation
+[submodule "ca-user"]
+	path = ca-user
+	url = https://github.com/Chanqun-Co/ca-user
+[submodule "ca-product"]
+	path = ca-product
+	url = https://github.com/Chanqun-Co/ca-product
