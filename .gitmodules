@@ -7,3 +7,9 @@
 [submodule "ca-product"]
 	path = ca-product
 	url = https://github.com/Chanqun-Co/ca-product
+[submodule "ca-gateway"]
+	path = ca-gateway
+	url = https://github.com/Chanqun-Co/ca-gateway
+[submodule "ca-eureka"]
+	path = ca-eureka
+	url = https://github.com/Chanqun-Co/ca-eureka
